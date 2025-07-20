@@ -13,11 +13,7 @@ class StoreMemoryRequest(BaseModel):
     user_id: str
     llm: str
     content: str
-
-
-# New Pydantic model for stats response
-
-
+    
 class MemoryStats(BaseModel):
     total: int
     first_timestamp: Optional[datetime]
@@ -65,4 +61,18 @@ async def memory_stats(user_id: str) -> MemoryStats:
         total=len(items),
         first_timestamp=items[0].timestamp,
         last_timestamp=items[-1].timestamp,
-    ) 
+    )
+
+
+# Delete endpoint
+
+
+class DeleteMemoryResponse(BaseModel):
+    deleted: int
+
+
+@router.delete("/{user_id}", summary="Delete all memories for a user", response_model=DeleteMemoryResponse)
+async def delete_memory(user_id: str) -> DeleteMemoryResponse:
+    """Remove every memory item for the specified user and return the number deleted."""
+    removed = memory_store.delete(user_id)
+    return DeleteMemoryResponse(deleted=removed) 

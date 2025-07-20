@@ -42,6 +42,14 @@ class MemoryStore:
             results = [m for m in results if m.llm == llm]
         return results
 
+    def delete(self, user_id: str) -> int:
+        """Delete **all** memories for a user.
+
+        Returns the number of items removed so callers can confirm deletion.
+        """
+        items = self._store.pop(user_id, [])
+        return len(items)
+
 
 # Global store instance the application can import
 memory_store = MemoryStore() 
