@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     debug: bool = True
     host: str = "0.0.0.0"
     port: int = 8000
+    app_version: str = "0.1.0"
 
     class Config:
         env_file = ".env"
