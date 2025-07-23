@@ -16,6 +16,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router)
     app.include_router(memory.router)
     app.include_router(version.router)
+    app.include_router(metrics.router)
 
     # Add per-request latency header so clients can see server-side processing time
     @app.middleware("http")
