@@ -6,6 +6,7 @@ __all__ = [
     "get_random_color",
     "generate_mcp_context",
     "get_user_memory_counts",
+    "get_memory_stats",
 ]
 
 
@@ -95,4 +96,22 @@ def get_user_memory_counts() -> dict[str, int]:
     """Return a mapping of user IDs to the number of memory items stored in the global MemoryStore."""
     from .memory import memory_store  # Local import to avoid circular dependency
 
-    return {user_id: len(items) for user_id, items in memory_store._store.items()} 
+    return {user_id: len(items) for user_id, items in memory_store._store.items()}
+
+
+def get_memory_stats(user_id: str) -> dict[str, object]:
+    """Return total, first_timestamp, and last_timestamp for the user's stored memories.
+
+    Equivalent to calling the `/memory/{user_id}/stats` API route, but usable in-process.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return {"total": 0, "first_timestamp": None, "last_timestamp": None}
+
+    return {
+        "total": len(items),
+        "first_timestamp": items[0].timestamp,
+        "last_timestamp": items[-1].timestamp,
+    }
