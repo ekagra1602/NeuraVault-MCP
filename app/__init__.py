@@ -1,5 +1,6 @@
 import random
 from datetime import datetime
+from typing import List
 
 __all__ = [
     "get_random_greeting",
@@ -7,6 +8,7 @@ __all__ = [
     "generate_mcp_context",
     "get_user_memory_counts",
     "get_memory_stats",
+    "get_recent_memories",
 ]
 
 
@@ -115,3 +117,18 @@ def get_memory_stats(user_id: str) -> dict[str, object]:
         "first_timestamp": items[0].timestamp,
         "last_timestamp": items[-1].timestamp,
     }
+
+
+def get_recent_memories(user_id: str, limit: int = 5):
+    """Return up to `limit` most recent MemoryItem objects for the given user.
+
+    The items are returned in descending timestamp order (most recent first).
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return []
+
+    # `memory_store.get` returns items sorted ascending by timestamp.
+    return items[-limit:][::-1]
