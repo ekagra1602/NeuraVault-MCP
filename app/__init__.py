@@ -1,6 +1,6 @@
 import random
-from datetime import datetime
-from typing import List
+from datetime import datetime, timedelta
+from typing import List, Dict, Any
 
 __all__ = [
     "get_random_greeting",
@@ -9,10 +9,11 @@ __all__ = [
     "get_user_memory_counts",
     "get_memory_stats",
     "get_recent_memories",
+    "prune_memories_before",
 ]
 
 
-def get_random_greeting():
+def get_random_greeting() -> str:
     """Return a random greeting from a predefined list."""
     greetings = [
         "Hello!",
@@ -25,7 +26,7 @@ def get_random_greeting():
     return random.choice(greetings)
 
 
-def get_random_color():
+def get_random_color() -> str:
     """Return a random color name from a predefined list."""
     colors = [
         "Red",
@@ -42,7 +43,7 @@ def get_random_color():
     return random.choice(colors)
 
 
-def generate_mcp_context(user_id: str | None = None):
+def generate_mcp_context(user_id: str | None = None) -> Dict[str, Any]:
     """Generate sample context data for Model Context Protocol (MCP) testing."""
     if user_id is None:
         user_id = f"user_{random.randint(1000, 9999)}"
@@ -94,14 +95,14 @@ def generate_mcp_context(user_id: str | None = None):
     }
 
 
-def get_user_memory_counts() -> dict[str, int]:
+def get_user_memory_counts() -> Dict[str, int]:
     """Return a mapping of user IDs to the number of memory items stored in the global MemoryStore."""
     from .memory import memory_store  # Local import to avoid circular dependency
 
     return {user_id: len(items) for user_id, items in memory_store._store.items()}
 
 
-def get_memory_stats(user_id: str) -> dict[str, object]:
+def get_memory_stats(user_id: str) -> Dict[str, Any]:
     """Return total, first_timestamp, and last_timestamp for the user's stored memories.
 
     Equivalent to calling the `/memory/{user_id}/stats` API route, but usable in-process.
@@ -132,3 +133,26 @@ def get_recent_memories(user_id: str, limit: int = 5):
 
     # `memory_store.get` returns items sorted ascending by timestamp.
     return items[-limit:][::-1]
+
+
+def prune_memories_before(user_id: str, cutoff: datetime) -> int:
+    """Delete all memories for `user_id` that were created **before** the given `cutoff` timestamp.
+
+    Returns the number of items removed. If the user has no memories or none match the cutoff, zero is returned.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    original_items = memory_store.get(user_id)
+    if not original_items:
+        return 0
+
+    remaining = [m for m in original_items if m.timestamp >= cutoff]
+    removed_count = len(original_items) - len(remaining)
+
+    # Update store with remaining items (or remove key entirely if now empty)
+    if remaining:
+        memory_store._store[user_id] = remaining
+    else:
+        memory_store._store.pop(user_id, None)
+
+    return removed_count
