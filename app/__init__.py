@@ -1,6 +1,7 @@
 import random
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
+import json
 
 __all__ = [
     "get_random_greeting",
@@ -10,6 +11,7 @@ __all__ = [
     "get_memory_stats",
     "get_recent_memories",
     "prune_memories_before",
+    "export_user_memories",
 ]
 
 
@@ -156,3 +158,17 @@ def prune_memories_before(user_id: str, cutoff: datetime) -> int:
         memory_store._store.pop(user_id, None)
 
     return removed_count
+
+
+def export_user_memories(user_id: str, *, as_json: bool = False):
+    """Export all memories for a user.
+
+    If `as_json` is True, returns a JSON string; otherwise returns a list of dicts.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    data = [item.dict() for item in items]
+    if as_json:
+        return json.dumps(data, default=str)
+    return data
