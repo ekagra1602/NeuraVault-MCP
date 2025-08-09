@@ -12,6 +12,7 @@ __all__ = [
     "get_recent_memories",
     "prune_memories_before",
     "export_user_memories",
+    "truncate_user_memories",
 ]
 
 
@@ -172,3 +173,29 @@ def export_user_memories(user_id: str, *, as_json: bool = False):
     if as_json:
         return json.dumps(data, default=str)
     return data
+
+
+def truncate_user_memories(user_id: str, keep_last: int = 100) -> int:
+    """Keep only the last `keep_last` memories for a user; delete older ones.
+
+    Returns the number of items removed. Uses the in-memory store ordering semantics
+    (older first) to safely slice the tail.
+    """
+    if keep_last <= 0:
+        # If caller passes 0 or negative, remove all
+        from .memory import memory_store
+        removed = len(memory_store.get(user_id))
+        memory_store._store.pop(user_id, None)
+        return removed
+
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if len(items) <= keep_last:
+        return 0
+
+    # Keep last N items (most recent), drop the rest
+    kept = items[-keep_last:]
+    removed_count = len(items) - len(kept)
+    memory_store._store[user_id] = kept
+    return removed_count
