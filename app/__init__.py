@@ -13,6 +13,7 @@ __all__ = [
     "prune_memories_before",
     "export_user_memories",
     "truncate_user_memories",
+    "search_user_memories",
 ]
 
 
@@ -199,3 +200,14 @@ def truncate_user_memories(user_id: str, keep_last: int = 100) -> int:
     removed_count = len(items) - len(kept)
     memory_store._store[user_id] = kept
     return removed_count
+
+
+def search_user_memories(user_id: str, query: str, llm: str | None = None):
+    """In-process convenience wrapper over MemoryStore.search for the given user.
+
+    Returns a list of MemoryItem objects matching the substring `query`. If `llm`
+    is provided, results are filtered to that LLM.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    return memory_store.search(user_id, query, llm=llm)
