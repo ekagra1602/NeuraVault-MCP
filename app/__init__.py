@@ -14,6 +14,7 @@ __all__ = [
     "export_user_memories",
     "truncate_user_memories",
     "search_user_memories",
+    "get_memories_since",
 ]
 
 
@@ -211,3 +212,13 @@ def search_user_memories(user_id: str, query: str, llm: str | None = None):
     from .memory import memory_store  # Local import to avoid circular dependency
 
     return memory_store.search(user_id, query, llm=llm)
+
+
+def get_memories_since(user_id: str, since: datetime):
+    """Return all memories for `user_id` with timestamp >= `since` (ascending order)."""
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return []
+    return [m for m in items if m.timestamp >= since]
