@@ -15,6 +15,7 @@ __all__ = [
     "truncate_user_memories",
     "search_user_memories",
     "get_memories_since",
+    "deduplicate_user_memories",
 ]
 
 
@@ -222,3 +223,34 @@ def get_memories_since(user_id: str, since: datetime):
     if not items:
         return []
     return [m for m in items if m.timestamp >= since]
+
+
+def deduplicate_user_memories(user_id: str) -> int:
+    """Remove exact-duplicate memory contents for a user (case-insensitive), keeping the most recent.
+
+    Returns the number of items removed.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return 0
+
+    seen_lower_content: set[str] = set()
+    deduped: list = []
+
+    # Iterate from newest to oldest to keep most recent duplicates
+    for item in reversed(items):
+        content_key = item.content.strip().lower()
+        if content_key in seen_lower_content:
+            continue
+        seen_lower_content.add(content_key)
+        deduped.append(item)
+
+    # deduped currently holds items newest->oldest; reverse back to ascending order
+    deduped.reverse()
+
+    removed = len(items) - len(deduped)
+    if removed > 0:
+        memory_store._store[user_id] = deduped
+    return removed
