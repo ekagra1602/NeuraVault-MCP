@@ -17,6 +17,7 @@ __all__ = [
     "get_memories_since",
     "deduplicate_user_memories",
     "merge_user_memories",
+    "get_user_memory_by_llm",
 ]
 
 
@@ -301,3 +302,21 @@ def merge_user_memories(source_user_id: str, target_user_id: str, *, deduplicate
             memory_store._store[target_user_id] = deduped
 
     return moved
+
+
+def get_user_memory_by_llm(user_id: str) -> Dict[str, int]:
+    """Return a mapping of LLM model names to the count of memories for that user.
+
+    Useful for analytics or understanding which models generated the most context.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return {}
+
+    llm_counts: Dict[str, int] = {}
+    for item in items:
+        llm_counts[item.llm] = llm_counts.get(item.llm, 0) + 1
+    
+    return llm_counts
