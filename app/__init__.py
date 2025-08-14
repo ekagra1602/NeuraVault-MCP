@@ -16,6 +16,7 @@ __all__ = [
     "search_user_memories",
     "get_memories_since",
     "deduplicate_user_memories",
+    "merge_user_memories",
 ]
 
 
@@ -254,3 +255,49 @@ def deduplicate_user_memories(user_id: str) -> int:
     if removed > 0:
         memory_store._store[user_id] = deduped
     return removed
+
+
+def merge_user_memories(source_user_id: str, target_user_id: str, *, deduplicate: bool = False) -> int:
+    """Move all memories from `source_user_id` into `target_user_id`.
+
+    Returns the number of items moved. If `deduplicate` is True, removes exact
+    duplicate contents on the target after merging (keeping most recent).
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    if source_user_id == target_user_id:
+        return 0
+
+    source_items = memory_store.get(source_user_id)
+    if not source_items:
+        # Nothing to move
+        memory_store._store.pop(source_user_id, None)
+        return 0
+
+    target_items = memory_store.get(target_user_id)
+
+    # Merge, then sort ascending by timestamp to preserve store invariant
+    merged = sorted([*target_items, *source_items], key=lambda m: m.timestamp)
+    moved = len(source_items)
+
+    memory_store._store[target_user_id] = merged
+    memory_store._store.pop(source_user_id, None)
+
+    if deduplicate:
+        # Reuse existing helper to dedupe target user's items
+        try:
+            removed = deduplicate_user_memories(target_user_id)  # type: ignore[name-defined]
+        except NameError:
+            # Fallback: simple inline dedupe if helper not found at import time
+            seen_lower_content: set[str] = set()
+            deduped: list = []
+            for item in reversed(merged):
+                content_key = item.content.strip().lower()
+                if content_key in seen_lower_content:
+                    continue
+                seen_lower_content.add(content_key)
+                deduped.append(item)
+            deduped.reverse()
+            memory_store._store[target_user_id] = deduped
+
+    return moved
