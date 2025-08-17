@@ -18,6 +18,8 @@ __all__ = [
     "deduplicate_user_memories",
     "merge_user_memories",
     "get_user_memory_by_llm",
+    "bulk_add_memories",
+    "validate_memory_store",
 ]
 
 
@@ -320,3 +322,76 @@ def get_user_memory_by_llm(user_id: str) -> Dict[str, int]:
         llm_counts[item.llm] = llm_counts.get(item.llm, 0) + 1
     
     return llm_counts
+
+
+def bulk_add_memories(memories: List[Dict[str, Any]]) -> int:
+    """Add multiple memory items from a list of dicts in one operation.
+    
+    Each dict should contain 'user_id', 'llm', and 'content' keys.
+    Returns the number of items successfully added.
+    """
+    from .memory import MemoryItem, memory_store  # Local import to avoid circular dependency
+    
+    added_count = 0
+    for mem_data in memories:
+        try:
+            # Create MemoryItem - timestamp will be auto-generated if not provided
+            item = MemoryItem(**mem_data)
+            memory_store.add(item)
+            added_count += 1
+        except (TypeError, ValueError):
+            # Skip invalid entries
+            continue
+    
+    return added_count
+
+
+def validate_memory_store() -> Dict[str, Any]:
+    """Run basic validation checks on the memory store and return a report.
+    
+    Checks for duplicate timestamps, invalid data, and consistency issues.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+    
+    report = {
+        "total_users": 0,
+        "total_memories": 0,
+        "duplicate_timestamps": 0,
+        "invalid_entries": 0,
+        "users_with_issues": [],
+        "timestamp_order_violations": 0,
+    }
+    
+    for user_id, items in memory_store._store.items():
+        report["total_users"] += 1
+        report["total_memories"] += len(items)
+        
+        user_issues = []
+        timestamps = []
+        
+        for item in items:
+            # Check for required fields
+            if not hasattr(item, 'user_id') or not hasattr(item, 'llm') or not hasattr(item, 'content'):
+                report["invalid_entries"] += 1
+                user_issues.append("missing_required_fields")
+            
+            if hasattr(item, 'timestamp'):
+                timestamps.append(item.timestamp)
+        
+        # Check timestamp ordering (should be ascending)
+        if timestamps:
+            sorted_timestamps = sorted(timestamps)
+            if timestamps != sorted_timestamps:
+                report["timestamp_order_violations"] += 1
+                user_issues.append("timestamp_order_violation")
+        
+        # Check for duplicate timestamps
+        if len(timestamps) != len(set(timestamps)):
+            duplicate_count = len(timestamps) - len(set(timestamps))
+            report["duplicate_timestamps"] += duplicate_count
+            user_issues.append("duplicate_timestamps")
+        
+        if user_issues:
+            report["users_with_issues"].append({"user_id": user_id, "issues": user_issues})
+    
+    return report
