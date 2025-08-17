@@ -20,6 +20,7 @@ __all__ = [
     "get_user_memory_by_llm",
     "bulk_add_memories",
     "validate_memory_store",
+    "get_oldest_memories",
 ]
 
 
@@ -395,3 +396,20 @@ def validate_memory_store() -> Dict[str, Any]:
             report["users_with_issues"].append({"user_id": user_id, "issues": user_issues})
     
     return report
+
+
+def get_oldest_memories(user_id: str, limit: int = 5):
+    """Return up to `limit` oldest MemoryItem objects for the given user.
+
+    The items are returned in ascending timestamp order (oldest first).
+    Complements get_recent_memories() for accessing historical context.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return []
+
+    # `memory_store.get` returns items sorted ascending by timestamp.
+    # Return first N items (oldest)
+    return items[:limit]
