@@ -21,6 +21,7 @@ __all__ = [
     "bulk_add_memories",
     "validate_memory_store",
     "get_oldest_memories",
+    "get_memories_by_position",
 ]
 
 
@@ -413,3 +414,32 @@ def get_oldest_memories(user_id: str, limit: int = 5):
     # `memory_store.get` returns items sorted ascending by timestamp.
     # Return first N items (oldest)
     return items[:limit]
+
+
+def get_memories_by_position(user_id: str, start: int = 0, end: int | None = None):
+    """Return memories for a user by position/index range in their timeline.
+
+    Args:
+        user_id: The user whose memories to retrieve
+        start: Starting index (inclusive, 0-based)
+        end: Ending index (exclusive), or None for rest of memories
+
+    Returns memories in ascending timestamp order (chronological).
+    Useful for pagination or accessing specific segments of memory history.
+    """
+    from .memory import memory_store  # Local import to avoid circular dependency
+
+    items = memory_store.get(user_id)
+    if not items:
+        return []
+
+    # Handle negative indices and bounds
+    if start < 0:
+        start = max(0, len(items) + start)
+    
+    if end is None:
+        return items[start:]
+    else:
+        if end < 0:
+            end = max(0, len(items) + end)
+        return items[start:end]
