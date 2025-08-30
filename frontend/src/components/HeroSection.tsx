@@ -80,7 +80,7 @@ export function HeroSection() {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="text-5xl sm:text-7xl lg:text-8xl font-bold leading-tight tracking-tight"
             >
-              <span className="text-white">Memory Control MCP</span>
+              <span className="text-white">Memora MCP</span>
             </motion.h1>
             
             <motion.p
