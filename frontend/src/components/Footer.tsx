@@ -12,7 +12,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center">
-                <img src="/memora-circuit.svg" alt="NeuraVault MCP" className="w-8 h-8 rounded-lg" />
+                <img src="./memora-circuit.svg" alt="NeuraVault MCP" className="w-8 h-8 rounded-lg" />
               </div>
               <div className="flex flex-col">
                 <span className="text-lg font-bold text-gradient">NeuraVault MCP</span>

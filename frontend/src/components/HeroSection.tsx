@@ -111,7 +111,7 @@ export function HeroSection() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 transition={{ duration: 0.2 }}
               >
-                <img src="/openai.svg" alt="OpenAI" className="w-6 h-6" />
+                <img src="./openai.svg" alt="OpenAI" className="w-6 h-6" />
                 <span className="text-gray-300 text-sm font-medium">OpenAI</span>
               </motion.div>
 
@@ -121,7 +121,7 @@ export function HeroSection() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 transition={{ duration: 0.2 }}
               >
-                <img src="/unnamed.webp" alt="Gemini" className="w-6 h-6 rounded-sm" />
+                <img src="./gemini.webp" alt="Gemini" className="w-6 h-6 rounded-sm" />
                 <span className="text-gray-300 text-sm font-medium">Gemini</span>
               </motion.div>
 
@@ -131,7 +131,7 @@ export function HeroSection() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 transition={{ duration: 0.2 }}
               >
-                <img src="/claude-ai-icon.png" alt="Claude" className="w-6 h-6 rounded-sm" />
+                <img src="./claude-ai-icon.png" alt="Claude" className="w-6 h-6 rounded-sm" />
                 <span className="text-gray-300 text-sm font-medium">Claude</span>
               </motion.div>
 
@@ -141,7 +141,7 @@ export function HeroSection() {
                 whileHover={{ scale: 1.05, y: -2 }}
                 transition={{ duration: 0.2 }}
               >
-                <img src="/unnamed (1).webp" alt="Grok" className="w-6 h-6 rounded-sm" />
+                <img src="./grok.webp" alt="Grok" className="w-6 h-6 rounded-sm" />
                 <span className="text-gray-300 text-sm font-medium">Grok</span>
               </motion.div>
             </div>

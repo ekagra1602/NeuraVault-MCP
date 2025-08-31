@@ -8,6 +8,19 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
 
+  const scrollToGetStarted = () => {
+    // If we're already on the homepage, just scroll
+    if (location.pathname === '/') {
+      const element = document.getElementById('get-started')
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      // If we're on another page, navigate to homepage with hash
+      window.location.href = '/#get-started'
+    }
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
@@ -16,10 +29,22 @@ export function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Handle scrolling to hash on page load
+  useEffect(() => {
+    if (location.pathname === '/' && location.hash === '#get-started') {
+      // Small delay to ensure the element is rendered
+      setTimeout(() => {
+        const element = document.getElementById('get-started')
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    }
+  }, [location])
+
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Docs', path: '/docs' },
-    { name: 'Studio', path: '/studio' },
   ]
 
   return (
@@ -63,7 +88,7 @@ export function Navigation() {
             
             <div className="flex items-center space-x-6">
               <motion.a
-                href="https://github.com"
+                href="https://github.com/ekagra1602/NeuraVault-MCP"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
@@ -73,6 +98,7 @@ export function Navigation() {
               </motion.a>
               
               <motion.button
+                onClick={scrollToGetStarted}
                 className="px-4 py-2 bg-white text-black rounded-full text-sm font-medium hover:bg-gray-200 transition-colors"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -126,7 +152,10 @@ export function Navigation() {
               >
                 <GitBranch className="w-5 h-5" />
               </a>
-              <button className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors">
+              <button 
+                onClick={scrollToGetStarted}
+                className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
                 Get Started
               </button>
             </div>
