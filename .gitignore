@@ -149,7 +149,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+# public  # Commented out - we need public folder for Vite React app
 
 # Vite build output
 dist/
