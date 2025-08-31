@@ -25,7 +25,7 @@ export function HeroSection() {
   }, [])
 
   return (
-    <section className="relative min-h-screen flex items-start justify-center overflow-hidden bg-gradient-radial pt-48 pb-12">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-radial py-12">
       {/* Background Grid */}
       <div className="absolute inset-0 bg-grid-pattern opacity-20" />
       
@@ -54,7 +54,7 @@ export function HeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center -mt-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
