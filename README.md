@@ -1,4 +1,4 @@
-# MCP – Memory Control Plane
+# NeuraVault MCP – Universal Memory Layer for AI
 
 A lightweight FastAPI server that provides **persistent memory** for LLM-powered applications.  
 Use it as an OpenAI-compatible plugin, call the REST API directly, or embed the in-process `MemoryStore` in your own Python code.
@@ -129,7 +129,7 @@ for item in memory_store.get("bob"):
 
 Variable | Default | Description
 ---------|---------|------------
-`APP_NAME` | `MCP Server` | Title shown in docs
+`APP_NAME` | `NeuraVault MCP Server` | Title shown in docs
 `DEBUG`    | `True` | Enables hot-reload & more verbose logging
 `HOST`     | `0.0.0.0` | Host interface for Uvicorn
 `PORT`     | `8000` | Port Uvicorn listens on

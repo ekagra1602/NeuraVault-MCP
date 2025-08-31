@@ -50,8 +50,8 @@ const features = [
   {
     icon: Cpu,
     title: 'Model Context Protocol',
-    description: 'Standards-compliant implementation of MCP for seamless AI tool integration.',
-    features: ['MCP standard', 'Tool discovery', 'Context sharing'],
+    description: 'Standards-compliant implementation of NeuraVault MCP for seamless AI tool integration.',
+    features: ['NeuraVault MCP standard', 'Tool discovery', 'Context sharing'],
     color: 'from-indigo-500 to-blue-500'
   }
 ]
@@ -138,7 +138,7 @@ export function FeaturesSection() {
             Perfect for Any AI Use Case
           </h3>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From simple chatbots to complex multi-agent systems, MCP provides the memory layer your AI needs.
+            From simple chatbots to complex multi-agent systems, NeuraVault MCP provides the memory layer your AI needs.
           </p>
         </motion.div>
 

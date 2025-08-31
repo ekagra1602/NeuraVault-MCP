@@ -4,7 +4,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    app_name: str = "MCP Server"
+    app_name: str = "NeuraVault MCP Server"
     debug: bool = True
     host: str = "0.0.0.0"
     port: int = 8000

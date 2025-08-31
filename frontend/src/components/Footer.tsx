@@ -11,12 +11,12 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                <img src="/memora-circuit.svg" alt="NeuraVault MCP" className="w-8 h-8 rounded-lg" />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg font-bold text-gradient">MCP</span>
-                <span className="text-xs text-muted-foreground -mt-1">Model Context Protocol</span>
+                <span className="text-lg font-bold text-gradient">NeuraVault MCP</span>
+                <span className="text-xs text-muted-foreground -mt-1">Universal Memory Layer</span>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -105,7 +105,7 @@ export function Footer() {
         <div className="mt-8 pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <p className="text-sm text-muted-foreground">
-              © {currentYear} MCP. Built with{' '}
+              © {currentYear} NeuraVault MCP. Built with{' '}
               <Heart className="inline w-4 h-4 text-red-500" /> for developers.
             </p>
             <div className="flex space-x-6 mt-4 sm:mt-0">

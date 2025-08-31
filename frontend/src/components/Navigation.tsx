@@ -35,7 +35,7 @@ export function Navigation() {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="text-xl font-light text-white tracking-wider">
-              MCP
+              NeuraVault MCP
             </div>
           </Link>
 

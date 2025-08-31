@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Script to start the MCP backend server
+# Script to start the NeuraVault MCP backend server
 
-echo "🚀 Starting MCP Backend Server..."
+echo "🚀 Starting NeuraVault MCP Backend Server..."
 
 # Check if we're in the correct directory
 if [ ! -f "app/main.py" ]; then
-    echo "❌ Backend files not found. Please run this script from the MCP project root."
+    echo "❌ Backend files not found. Please run this script from the NeuraVault MCP project root."
     exit 1
 fi
 

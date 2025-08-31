@@ -1,4 +1,4 @@
-# Memora MCP - Development Guide
+# NeuraVault MCP - Development Guide
 
 A universal memory layer for AI models supporting OpenAI, Gemini, Claude, Grok, and any LLM with context protocol support.
 

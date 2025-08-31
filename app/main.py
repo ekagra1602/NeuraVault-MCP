@@ -31,7 +31,7 @@ def create_app() -> FastAPI:
         """Return the plugin manifest so compatible LLMs (e.g. ChatGPT) can discover the API."""
         return {
             "schema_version": "v1",
-            "name_for_human": "MCP Memory Plugin",
+            "name_for_human": "NeuraVault MCP Memory Plugin",
             "name_for_model": "mcp_memory",
             "description_for_human": "Store and retrieve user memories to provide long-term context to LLM applications.",
             "description_for_model": (

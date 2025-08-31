@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Script to set up and start the MCP frontend
+# Script to set up and start the NeuraVault MCP frontend
 
-echo "🚀 Setting up MCP Frontend..."
+echo "🚀 Setting up NeuraVault MCP Frontend..."
 
 # Check if we're in the correct directory
 if [ ! -d "frontend" ]; then
-    echo "❌ Frontend directory not found. Please run this script from the MCP project root."
+    echo "❌ Frontend directory not found. Please run this script from the NeuraVault MCP project root."
     exit 1
 fi
 
@@ -28,7 +28,7 @@ fi
 
 echo "🎨 Starting development server..."
 echo "📍 Frontend will be available at: http://localhost:5173"
-echo "🔗 Make sure your MCP backend is running at: http://localhost:8000"
+echo "🔗 Make sure your NeuraVault MCP backend is running at: http://localhost:8000"
 echo ""
 echo "Press Ctrl+C to stop the server"
 echo ""

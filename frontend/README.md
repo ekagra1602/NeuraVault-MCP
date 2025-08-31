@@ -1,6 +1,6 @@
-# MCP Frontend
+# NeuraVault MCP Frontend
 
-A modern, dynamic React frontend for the Model Context Protocol (MCP) server.
+A modern, dynamic React frontend for the NeuraVault MCP (Model Context Protocol) server.
 
 ## Features
 
@@ -74,7 +74,7 @@ src/
 
 ## API Integration
 
-The frontend includes a proxy configuration in `vite.config.ts` that forwards API calls to the MCP server:
+The frontend includes a proxy configuration in `vite.config.ts` that forwards API calls to the NeuraVault MCP server:
 
 ```typescript
 server: {

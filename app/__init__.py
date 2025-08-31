@@ -56,7 +56,7 @@ def get_random_color() -> str:
 
 
 def generate_mcp_context(user_id: str | None = None) -> Dict[str, Any]:
-    """Generate sample context data for Model Context Protocol (MCP) testing."""
+    """Generate sample context data for NeuraVault MCP (Model Context Protocol) testing."""
     if user_id is None:
         user_id = f"user_{random.randint(1000, 9999)}"
 

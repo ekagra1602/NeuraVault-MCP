@@ -5,7 +5,7 @@ const docSections = [
   {
     title: 'Quick Start',
     icon: Zap,
-    description: 'Get up and running with MCP in under 5 minutes',
+    description: 'Get up and running with NeuraVault MCP in under 5 minutes',
     items: [
       'Installation & Setup',
       'Running the Server',
@@ -27,7 +27,7 @@ const docSections = [
   {
     title: 'Python SDK',
     icon: Database,
-    description: 'Use MCP directly in your Python applications',
+    description: 'Use NeuraVault MCP directly in your Python applications',
     items: [
       'In-Process Usage',
       'Memory Store API',
@@ -38,7 +38,7 @@ const docSections = [
   {
     title: 'Integration Guide',
     icon: Book,
-    description: 'Integrate MCP with popular AI frameworks',
+    description: 'Integrate NeuraVault MCP with popular AI frameworks',
     items: [
       'OpenAI Plugin Setup',
       'LangChain Integration',
@@ -63,7 +63,7 @@ export default function DocsPage() {
             <span className="text-gradient">Documentation</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Everything you need to know about implementing and using the Model Context Protocol server.
+            Everything you need to know about implementing and using the NeuraVault MCP server.
           </p>
         </motion.div>
 
