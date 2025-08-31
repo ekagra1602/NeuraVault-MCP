@@ -5,8 +5,6 @@ import {
   Code, 
   Globe, 
   Shield, 
-  ArrowRight,
-  CheckCircle,
   Cpu,
   Clock
 } from 'lucide-react'

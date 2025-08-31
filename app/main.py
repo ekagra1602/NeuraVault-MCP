@@ -46,7 +46,7 @@ def create_app() -> FastAPI:
             },
             "logo_url": None,
             "contact_email": "support@example.com",
-            "legal_info_url": "https://github.com/your-org/mcp#license",
+            "legal_info_url": "https://github.com/ekagra1602/NeuraVault-MCP#license",
         }
 
     return app

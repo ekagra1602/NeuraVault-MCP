@@ -19,7 +19,7 @@ Use it as an OpenAI-compatible plugin, call the REST API directly, or embed the 
 
 ```bash
 # Clone repository & enter it
-$ git clone https://github.com/your-org/mcp.git && cd mcp
+$ git clone https://github.com/ekagra1602/NeuraVault-MCP.git && cd NeuraVault-MCP
 
 # (Optional) create & activate a virtual environment
 $ python -m venv .venv && source .venv/bin/activate

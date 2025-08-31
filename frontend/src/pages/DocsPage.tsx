@@ -123,7 +123,7 @@ export default function DocsPage() {
               <h3 className="text-lg font-semibold mb-4">1. Installation</h3>
               <div className="bg-background/50 rounded-lg p-4 font-mono text-sm">
                 <div className="text-muted-foreground"># Clone the repository</div>
-                <div>git clone https://github.com/your-org/mcp.git</div>
+                <div>git clone https://github.com/ekagra1602/NeuraVault-MCP.git</div>
                 <div className="mt-2 text-muted-foreground"># Install dependencies</div>
                 <div>pip install -r requirements.txt</div>
               </div>

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Database, Zap, Code, Globe } from 'lucide-react'
+import { Database, Zap, Code, Globe } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 const floatingIcons = [
