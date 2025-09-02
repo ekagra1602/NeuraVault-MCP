@@ -66,7 +66,7 @@ export function HeroSection() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="inline-flex items-center px-6 py-3 rounded-full glass-morphism text-sm font-medium border border-white/10"
+            className="inline-flex items-center px-6 py-3 rounded-full glgass-morphism text-sm font-medium border border-white/10"
           >
             <span className="text-xs text-muted-foreground mr-2">noun:</span>
             <span className="text-white">a memory layer for AI</span>
