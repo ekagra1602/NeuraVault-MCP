@@ -37,7 +37,8 @@ def create_app() -> FastAPI:
             "description_for_model": (
                 "Plugin for managing persistent memories. "
                 "Use `POST /memory` to add a memory (requires `user_id`, `llm`, `content`). "
-                "Use `GET /memory/{user_id}` to fetch memories for a user ordered by timestamp ascending."
+                "Use `GET /memory/{user_id}` to fetch all memories for a user. "
+                "Use `GET /memory/{user_id}/relevant?prompt=...&k=5` to fetch the top-k relevant memories for a prompt."
             ),
             "auth": {"type": "none"},
             "api": {

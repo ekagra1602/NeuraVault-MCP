@@ -3,6 +3,9 @@ from typing import Dict, List
 from typing import Optional
 
 from pydantic import BaseModel, Field
+import math
+import re
+from collections import Counter, defaultdict
 
 
 class MemoryItem(BaseModel):
@@ -49,6 +52,85 @@ class MemoryStore:
         """
         items = self._store.pop(user_id, [])
         return len(items)
+
+    # Relevant memory retrieval
+    def relevant(
+        self,
+        user_id: str,
+        prompt: str,
+        *,
+        llm: Optional[str] = None,
+        k: int = 5,
+        min_score: float = 0.0,
+    ) -> List[MemoryItem]:
+        """Return the top-k memory items most relevant to the given prompt.
+
+        This uses a lightweight TF-IDF cosine similarity over tokenized text.
+        """
+        items = self.get(user_id)
+        if llm is not None:
+            items = [m for m in items if m.llm == llm]
+
+        if not items:
+            return []
+
+        # Simple tokenizer: alnum lowercased tokens
+        token_pattern = re.compile(r"[a-z0-9]+")
+
+        def tokenize(text: str) -> List[str]:
+            return token_pattern.findall(text.lower())
+
+        # Build document term frequencies
+        docs_tokens: List[List[str]] = [tokenize(m.content) for m in items]
+        prompt_tokens = tokenize(prompt)
+
+        if not prompt_tokens:
+            # If the prompt is empty or only stop chars, return the most recent k
+            return list(reversed(items))[:k]
+
+        # Document frequencies
+        df = defaultdict(int)
+        for tokens in docs_tokens:
+            for term in set(tokens):
+                df[term] += 1
+
+        num_docs = len(docs_tokens)
+
+        def idf(term: str) -> float:
+            # Smoothed IDF
+            return math.log((num_docs + 1) / (df.get(term, 0) + 1)) + 1.0
+
+        def tfidf_vector(tokens: List[str]) -> Dict[str, float]:
+            tf = Counter(tokens)
+            vec: Dict[str, float] = {}
+            for term, count in tf.items():
+                vec[term] = (count / len(tokens)) * idf(term)
+            return vec
+
+        def cosine_sim(a: Dict[str, float], b: Dict[str, float]) -> float:
+            # Dot product
+            dot = 0.0
+            for term, aval in a.items():
+                bval = b.get(term)
+                if bval is not None:
+                    dot += aval * bval
+            # Norms
+            anorm = math.sqrt(sum(v * v for v in a.values())) or 1.0
+            bnorm = math.sqrt(sum(v * v for v in b.values())) or 1.0
+            return dot / (anorm * bnorm)
+
+        prompt_vec = tfidf_vector(prompt_tokens)
+
+        scored: List[tuple[float, MemoryItem]] = []
+        for tokens, item in zip(docs_tokens, items):
+            doc_vec = tfidf_vector(tokens)
+            score = cosine_sim(prompt_vec, doc_vec)
+            scored.append((score, item))
+
+        # Filter and sort by score desc, then by recency desc for tie-breaker
+        filtered = [si for si in scored if si[0] >= min_score]
+        filtered.sort(key=lambda si: (si[0], si[1].timestamp), reverse=True)
+        return [item for _, item in filtered[: max(1, k)]]
 
 
 # Global store instance the application can import

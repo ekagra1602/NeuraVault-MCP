@@ -47,6 +47,25 @@ async def search_memory(
     return memory_store.search(user_id, q, llm=llm)
 
 
+# Relevant endpoint
+
+
+@router.get(
+    "/{user_id}/relevant",
+    summary="Retrieve top-k relevant memories for a prompt",
+    response_model=List[MemoryItem],
+)
+async def relevant_memory(
+    user_id: str,
+    prompt: str = Query(..., description="The prompt/turn to retrieve context for"),
+    llm: Optional[str] = Query(None, description="Filter by LLM name"),
+    k: int = Query(5, ge=1, le=50, description="Max number of items to return"),
+    min_score: float = Query(0.0, ge=0.0, le=1.0, description="Minimum similarity score to include"),
+) -> List[MemoryItem]:
+    """Return the k most relevant memories for the given prompt using lightweight TF-IDF similarity."""
+    return memory_store.relevant(user_id, prompt, llm=llm, k=k, min_score=min_score)
+
+
 # Stats endpoint
 
 
