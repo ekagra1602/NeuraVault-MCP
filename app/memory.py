@@ -132,6 +132,107 @@ class MemoryStore:
         filtered.sort(key=lambda si: (si[0], si[1].timestamp), reverse=True)
         return [item for _, item in filtered[: max(1, k)]]
 
+    def relevant_diverse(
+        self,
+        user_id: str,
+        prompt: str,
+        *,
+        llm: Optional[str] = None,
+        k: int = 5,
+        lambda_mult: float = 0.5,
+        min_score: float = 0.0,
+    ) -> List[MemoryItem]:
+        """Return top-k memories using MMR (diversity-aware relevance).
+
+        lambda_mult controls relevance vs diversity tradeoff: 1.0 is relevance-only; 0.0 is diversity-only.
+        """
+        items = self.get(user_id)
+        if llm is not None:
+            items = [m for m in items if m.llm == llm]
+
+        if not items:
+            return []
+
+        lambda_mult = max(0.0, min(1.0, lambda_mult))
+
+        token_pattern = re.compile(r"[a-z0-9]+")
+
+        def tokenize(text: str) -> List[str]:
+            return token_pattern.findall(text.lower())
+
+        docs_tokens: List[List[str]] = [tokenize(m.content) for m in items]
+        prompt_tokens = tokenize(prompt)
+
+        if not prompt_tokens:
+            return list(reversed(items))[:k]
+
+        df = defaultdict(int)
+        for tokens in docs_tokens:
+            for term in set(tokens):
+                df[term] += 1
+
+        num_docs = len(docs_tokens)
+
+        def idf(term: str) -> float:
+            return math.log((num_docs + 1) / (df.get(term, 0) + 1)) + 1.0
+
+        def tfidf_vector(tokens: List[str]) -> Dict[str, float]:
+            tf = Counter(tokens)
+            vec: Dict[str, float] = {}
+            for term, count in tf.items():
+                vec[term] = (count / len(tokens)) * idf(term)
+            return vec
+
+        def cosine_sim(a: Dict[str, float], b: Dict[str, float]) -> float:
+            dot = 0.0
+            for term, aval in a.items():
+                bval = b.get(term)
+                if bval is not None:
+                    dot += aval * bval
+            anorm = math.sqrt(sum(v * v for v in a.values())) or 1.0
+            bnorm = math.sqrt(sum(v * v for v in b.values())) or 1.0
+            return dot / (anorm * bnorm)
+
+        prompt_vec = tfidf_vector(prompt_tokens)
+        doc_vecs: List[Dict[str, float]] = [tfidf_vector(toks) for toks in docs_tokens]
+
+        # Precompute similarity to prompt
+        sim_to_prompt: List[float] = [cosine_sim(v, prompt_vec) for v in doc_vecs]
+
+        # Filter out below min_score relative to prompt
+        cand_indices = [i for i, s in enumerate(sim_to_prompt) if s >= min_score]
+        if not cand_indices:
+            return []
+
+        selected: List[int] = []
+        # Greedy MMR selection
+        while len(selected) < min(k, len(cand_indices)):
+            best_idx = None
+            best_score = -1e9
+            for i in cand_indices:
+                if i in selected:
+                    continue
+                relevance = sim_to_prompt[i]
+                if not selected:
+                    diversity_penalty = 0.0
+                else:
+                    # Max similarity to any selected doc
+                    diversity_penalty = max(
+                        cosine_sim(doc_vecs[i], doc_vecs[j]) for j in selected
+                    )
+                score = lambda_mult * relevance - (1.0 - lambda_mult) * diversity_penalty
+                # Tie-breaker: prefer more recent by timestamp when scores equal
+                if score > best_score or (
+                    abs(score - best_score) < 1e-9 and items[i].timestamp > items[best_idx].timestamp if best_idx is not None else True
+                ):
+                    best_score = score
+                    best_idx = i
+            if best_idx is None:
+                break
+            selected.append(best_idx)
+
+        return [items[i] for i in selected]
+
 
 # Global store instance the application can import
 memory_store = MemoryStore() 
