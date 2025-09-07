@@ -233,6 +233,75 @@ class MemoryStore:
 
         return [items[i] for i in selected]
 
+    def relevant_pack(
+        self,
+        user_id: str,
+        prompt: str,
+        *,
+        llm: Optional[str] = None,
+        k: int = 10,
+        budget_chars: int = 2000,
+        strategy: str = "relevant",
+        min_score: float = 0.0,
+        lambda_mult: float = 0.5,
+        candidate_multiplier: int = 3,
+        separator: str = "\n\n",
+    ) -> tuple[List[MemoryItem], str]:
+        """Select up to k relevant memories and pack them into a single string within a character budget.
+
+        strategy: "relevant" (TF-IDF) or "mmr" (diversity-aware).
+        Returns (items, packed_text).
+        """
+        k = max(1, k)
+        budget_chars = max(1, budget_chars)
+        candidate_k = max(k, min(k * max(1, candidate_multiplier), 100))
+
+        if strategy == "mmr":
+            candidates = self.relevant_diverse(
+                user_id,
+                prompt,
+                llm=llm,
+                k=candidate_k,
+                lambda_mult=lambda_mult,
+                min_score=min_score,
+            )
+        else:
+            candidates = self.relevant(
+                user_id,
+                prompt,
+                llm=llm,
+                k=candidate_k,
+                min_score=min_score,
+            )
+
+        if not candidates:
+            return [], ""
+
+        packed: List[MemoryItem] = []
+        pieces: List[str] = []
+        current_len = 0
+
+        for item in candidates:
+            if len(packed) >= k:
+                break
+            piece = item.content
+            add_len = (len(separator) if pieces else 0) + len(piece)
+            if pieces and current_len + add_len > budget_chars:
+                # Stop if adding this would exceed budget and we already packed something
+                break
+            if not pieces and add_len > budget_chars:
+                # If the first item itself exceeds the budget, truncate it
+                piece = piece[: max(0, budget_chars)]
+                add_len = len(piece)
+                if not piece:
+                    continue
+            pieces.append(piece)
+            packed.append(item)
+            current_len += add_len
+
+        packed_text = separator.join(pieces)
+        return packed, packed_text
+
 
 # Global store instance the application can import
 memory_store = MemoryStore() 

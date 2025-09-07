@@ -39,7 +39,8 @@ def create_app() -> FastAPI:
                 "Use `POST /memory` to add a memory (requires `user_id`, `llm`, `content`). "
                 "Use `GET /memory/{user_id}` to fetch all memories for a user. "
                 "Use `GET /memory/{user_id}/relevant?prompt=...&k=5` to fetch the top-k relevant memories for a prompt. "
-                "Use `GET /memory/{user_id}/relevant_diverse?prompt=...&k=5` to fetch relevant and diverse memories using MMR."
+                "Use `GET /memory/{user_id}/relevant_diverse?prompt=...&k=5` to fetch relevant and diverse memories using MMR. "
+                "Use `GET /memory/{user_id}/relevant_pack?prompt=...&budget_chars=2000` to fetch packed context text and items within a size budget."
             ),
             "auth": {"type": "none"},
             "api": {

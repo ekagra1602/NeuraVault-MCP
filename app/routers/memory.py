@@ -89,6 +89,39 @@ async def relevant_diverse_memory(
         min_score=min_score,
     )
 
+class PackedResponse(BaseModel):
+    items: List[MemoryItem]
+    packed_text: str
+
+
+@router.get(
+    "/{user_id}/relevant_pack",
+    summary="Retrieve relevant memories packed into a single string under a budget",
+    response_model=PackedResponse,
+)
+async def relevant_pack_memory(
+    user_id: str,
+    prompt: str = Query(..., description="The prompt/turn to retrieve context for"),
+    llm: Optional[str] = Query(None, description="Filter by LLM name"),
+    k: int = Query(10, ge=1, le=50, description="Max number of items to include"),
+    budget_chars: int = Query(2000, ge=1, le=20000, description="Character budget for packed text"),
+    strategy: str = Query("relevant", description='Scoring strategy: "relevant" or "mmr"'),
+    min_score: float = Query(0.0, ge=0.0, le=1.0, description="Minimum similarity score to include"),
+    lambda_mult: float = Query(0.5, ge=0.0, le=1.0, description="MMR tradeoff (only used with strategy=mmr)"),
+) -> PackedResponse:
+    """Return packed relevant memories along with the combined text, under a size budget."""
+    items, packed_text = memory_store.relevant_pack(
+        user_id,
+        prompt,
+        llm=llm,
+        k=k,
+        budget_chars=budget_chars,
+        strategy=strategy,
+        min_score=min_score,
+        lambda_mult=lambda_mult,
+    )
+    return PackedResponse(items=items, packed_text=packed_text)
+
 
 # Stats endpoint
 
