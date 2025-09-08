@@ -34,6 +34,20 @@ async def read_memory(user_id: str) -> List[MemoryItem]:
     return memory_store.get(user_id)
 
 
+@router.get(
+    "/{user_id}/recent",
+    summary="Retrieve the most recent k memory items for a user",
+    response_model=List[MemoryItem],
+)
+async def recent_memory(
+    user_id: str,
+    k: int = Query(5, ge=1, le=50, description="Number of recent items to return"),
+    llm: Optional[str] = Query(None, description="Filter by LLM name"),
+) -> List[MemoryItem]:
+    """Return the most recent k memory items for a user, optionally filtered by LLM."""
+    return memory_store.recent(user_id, llm=llm, k=k)
+
+
 # New: search endpoint
 
 

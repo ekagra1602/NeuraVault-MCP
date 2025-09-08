@@ -302,6 +302,20 @@ class MemoryStore:
         packed_text = separator.join(pieces)
         return packed, packed_text
 
+    def recent(
+        self,
+        user_id: str,
+        *,
+        llm: Optional[str] = None,
+        k: int = 5,
+    ) -> List[MemoryItem]:
+        """Return the most recent k memory items for a user, optionally filtered by LLM."""
+        k = max(1, k)
+        items = self.get(user_id)  # ascending by timestamp
+        if llm is not None:
+            items = [m for m in items if m.llm == llm]
+        return list(reversed(items))[:k]
+
 
 # Global store instance the application can import
 memory_store = MemoryStore() 

@@ -41,6 +41,7 @@ def create_app() -> FastAPI:
                 "Use `GET /memory/{user_id}/relevant?prompt=...&k=5` to fetch the top-k relevant memories for a prompt. "
                 "Use `GET /memory/{user_id}/relevant_diverse?prompt=...&k=5` to fetch relevant and diverse memories using MMR. "
                 "Use `GET /memory/{user_id}/relevant_pack?prompt=...&budget_chars=2000` to fetch packed context text and items within a size budget."
+                "Use `GET /memory/{user_id}/recent?k=5` to fetch the most recent memories."
             ),
             "auth": {"type": "none"},
             "api": {
