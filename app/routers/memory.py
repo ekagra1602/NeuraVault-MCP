@@ -103,6 +103,30 @@ async def relevant_diverse_memory(
         min_score=min_score,
     )
 
+
+@router.get(
+    "/{user_id}/relevant_time_decay",
+    summary="Retrieve top-k relevant memories with time decay favoring recent items",
+    response_model=List[MemoryItem],
+)
+async def relevant_time_decay_memory(
+    user_id: str,
+    prompt: str = Query(..., description="The prompt/turn to retrieve context for"),
+    llm: Optional[str] = Query(None, description="Filter by LLM name"),
+    k: int = Query(5, ge=1, le=50, description="Max number of items to return"),
+    half_life_hours: float = Query(24.0, ge=0.01, le=24*365.0, description="Half-life hours for time decay"),
+    min_score: float = Query(0.0, ge=0.0, le=1.0, description="Minimum similarity score to include"),
+) -> List[MemoryItem]:
+    """Return the k most relevant memories applying exponential time decay by recency."""
+    return memory_store.relevant_time_decay(
+        user_id,
+        prompt,
+        llm=llm,
+        k=k,
+        half_life_hours=half_life_hours,
+        min_score=min_score,
+    )
+
 class PackedResponse(BaseModel):
     items: List[MemoryItem]
     packed_text: str
