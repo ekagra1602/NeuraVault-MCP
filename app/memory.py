@@ -394,6 +394,95 @@ class MemoryStore:
         scored.sort(key=lambda si: (si[0], si[1].timestamp), reverse=True)
         return [item for _, item in scored[: max(1, k)]]
 
+    def relevant_window(
+        self,
+        user_id: str,
+        prompt: str,
+        *,
+        llm: Optional[str] = None,
+        k: int = 5,
+        min_score: float = 0.0,
+        window_count: Optional[int] = None,
+        window_hours: Optional[float] = None,
+    ) -> List[MemoryItem]:
+        """Return top-k relevant memories within a recency window (by count and/or hours).
+
+        If both window_hours and window_count are provided, the filter is applied in sequence:
+        first time window, then take the most recent window_count items.
+        If neither is provided, defaults to the most recent 100 items.
+        """
+        k = max(1, k)
+
+        items = self.get(user_id)  # ascending
+        if llm is not None:
+            items = [m for m in items if m.llm == llm]
+
+        if window_hours is not None:
+            now = datetime.utcnow()
+            cutoff = now.timestamp() - max(0.0, window_hours) * 3600.0
+            items = [m for m in items if m.timestamp.timestamp() >= cutoff]
+
+        if window_count is None and window_hours is None:
+            window_count = 100
+
+        if window_count is not None:
+            window_count = max(1, int(window_count))
+            items = list(reversed(items))[:window_count]
+            items.reverse()  # keep ascending for stable behavior
+
+        if not items:
+            return []
+
+        token_pattern = re.compile(r"[a-z0-9]+")
+
+        def tokenize(text: str) -> List[str]:
+            return token_pattern.findall(text.lower())
+
+        docs_tokens: List[List[str]] = [tokenize(m.content) for m in items]
+        prompt_tokens = tokenize(prompt)
+
+        if not prompt_tokens:
+            return list(reversed(items))[:k]
+
+        df = defaultdict(int)
+        for tokens in docs_tokens:
+            for term in set(tokens):
+                df[term] += 1
+
+        num_docs = len(docs_tokens)
+
+        def idf(term: str) -> float:
+            return math.log((num_docs + 1) / (df.get(term, 0) + 1)) + 1.0
+
+        def tfidf_vector(tokens: List[str]) -> Dict[str, float]:
+            tf = Counter(tokens)
+            vec: Dict[str, float] = {}
+            for term, count in tf.items():
+                vec[term] = (count / len(tokens)) * idf(term)
+            return vec
+
+        def cosine_sim(a: Dict[str, float], b: Dict[str, float]) -> float:
+            dot = 0.0
+            for term, aval in a.items():
+                bval = b.get(term)
+                if bval is not None:
+                    dot += aval * bval
+            anorm = math.sqrt(sum(v * v for v in a.values())) or 1.0
+            bnorm = math.sqrt(sum(v * v for v in b.values())) or 1.0
+            return dot / (anorm * bnorm)
+
+        prompt_vec = tfidf_vector(prompt_tokens)
+
+        scored: List[tuple[float, MemoryItem]] = []
+        for tokens, item in zip(docs_tokens, items):
+            doc_vec = tfidf_vector(tokens)
+            score = cosine_sim(prompt_vec, doc_vec)
+            if score >= min_score:
+                scored.append((score, item))
+
+        scored.sort(key=lambda si: (si[0], si[1].timestamp), reverse=True)
+        return [item for _, item in scored[: max(1, k)]]
+
 
 # Global store instance the application can import
 memory_store = MemoryStore() 

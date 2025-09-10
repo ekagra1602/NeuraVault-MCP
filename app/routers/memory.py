@@ -161,6 +161,32 @@ async def relevant_pack_memory(
     return PackedResponse(items=items, packed_text=packed_text)
 
 
+@router.get(
+    "/{user_id}/relevant_window",
+    summary="Retrieve top-k relevant memories within a recent window (count/hours)",
+    response_model=List[MemoryItem],
+)
+async def relevant_window_memory(
+    user_id: str,
+    prompt: str = Query(..., description="The prompt/turn to retrieve context for"),
+    llm: Optional[str] = Query(None, description="Filter by LLM name"),
+    k: int = Query(5, ge=1, le=50, description="Max number of items to return"),
+    min_score: float = Query(0.0, ge=0.0, le=1.0, description="Minimum similarity score to include"),
+    window_count: Optional[int] = Query(None, ge=1, le=1000, description="Consider only the most recent N items"),
+    window_hours: Optional[float] = Query(None, ge=0.0, le=24*365.0, description="Consider only items within the past hours"),
+) -> List[MemoryItem]:
+    """Return relevant memories restricted to a recent window by time and/or count."""
+    return memory_store.relevant_window(
+        user_id,
+        prompt,
+        llm=llm,
+        k=k,
+        min_score=min_score,
+        window_count=window_count,
+        window_hours=window_hours,
+    )
+
+
 # Stats endpoint
 
 
