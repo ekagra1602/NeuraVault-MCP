@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 
 from .config import get_settings
-from .routers import health, memory
+from .routers import health, memory, utils
 
 from dotenv import load_dotenv
 import time
@@ -15,6 +15,7 @@ def create_app() -> FastAPI:
     # Include routers
     app.include_router(health.router)
     app.include_router(memory.router)
+    app.include_router(utils.router)
 
     # Add per-request latency header so clients can see server-side processing time
     @app.middleware("http")
