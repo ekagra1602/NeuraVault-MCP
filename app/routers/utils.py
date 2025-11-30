@@ -19,3 +19,12 @@ async def get_text_stats(input: TextInput):
         "char_count": len(input.text),
         "word_count": len(input.text.split())
     }
+
+
+@router.get("/add", summary="Add two numbers")
+async def add(a: float, b: float) -> dict[str, float]:
+    """
+    Returns the sum of two numbers provided as query parameters.
+    Example: GET /utils/add?a=1.5&b=2
+    """
+    return {"a": a, "b": b, "sum": a + b}
