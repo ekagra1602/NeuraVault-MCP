@@ -28,3 +28,12 @@ async def add(a: float, b: float) -> dict[str, float]:
     Example: GET /utils/add?a=1.5&b=2
     """
     return {"a": a, "b": b, "sum": a + b}
+
+
+@router.get("/multiply", summary="Multiply two numbers")
+async def multiply(a: float, b: float) -> dict[str, float]:
+    """
+    Returns the product of two numbers provided as query parameters.
+    Example: GET /utils/multiply?a=3&b=4
+    """
+    return {"a": a, "b": b, "product": a * b}
