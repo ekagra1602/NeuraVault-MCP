@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 router = APIRouter(
@@ -37,3 +37,14 @@ async def multiply(a: float, b: float) -> dict[str, float]:
     Example: GET /utils/multiply?a=3&b=4
     """
     return {"a": a, "b": b, "product": a * b}
+
+
+@router.get("/divide", summary="Divide two numbers")
+async def divide(a: float, b: float) -> dict[str, float]:
+    """
+    Returns the quotient of two numbers provided as query parameters.
+    Example: GET /utils/divide?a=10&b=2
+    """
+    if b == 0:
+        raise HTTPException(status_code=400, detail="Division by zero is not allowed")
+    return {"a": a, "b": b, "quotient": a / b}
