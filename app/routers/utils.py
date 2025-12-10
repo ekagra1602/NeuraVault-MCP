@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException
+from datetime import datetime, timezone
+import time
 from pydantic import BaseModel
 
 router = APIRouter(
@@ -48,3 +50,16 @@ async def divide(a: float, b: float) -> dict[str, float]:
     if b == 0:
         raise HTTPException(status_code=400, detail="Division by zero is not allowed")
     return {"a": a, "b": b, "quotient": a / b}
+
+
+@router.get("/timestamp", summary="Get current server time")
+async def timestamp() -> dict[str, object]:
+    """
+    Returns the current server timestamp in ISO-8601 and epoch milliseconds.
+    Example: GET /utils/timestamp
+    """
+    now = datetime.now(timezone.utc)
+    return {
+        "iso": now.isoformat(),
+        "epoch_ms": int(time.time() * 1000),
+    }
