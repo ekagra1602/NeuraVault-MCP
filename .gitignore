@@ -197,3 +197,5 @@ config/secrets.yml
 # Local configuration
 config/local.yml
 .env.local
+
+Agents.md

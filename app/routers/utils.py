@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from datetime import datetime, timezone
 import time
 from pydantic import BaseModel
+from uuid import uuid4
 
 router = APIRouter(
     prefix="/utils",
@@ -63,3 +64,12 @@ async def timestamp() -> dict[str, object]:
         "iso": now.isoformat(),
         "epoch_ms": int(time.time() * 1000),
     }
+
+
+@router.get("/uuid", summary="Generate a UUID v4")
+async def generate_uuid() -> dict[str, str]:
+    """
+    Returns a newly generated UUID v4 string.
+    Example: GET /utils/uuid
+    """
+    return {"uuid": str(uuid4())}
