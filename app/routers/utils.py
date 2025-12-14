@@ -65,6 +65,13 @@ async def timestamp() -> dict[str, object]:
         "epoch_ms": int(time.time() * 1000),
     }
 
+@router.post("/reverse", summary="Reverse a string")
+async def reverse_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and its reversed version.
+    """
+    return {"original": input.text, "reversed": input.text[::-1]}
+
 
 @router.get("/uuid", summary="Generate a UUID v4")
 async def generate_uuid() -> dict[str, str]:
