@@ -72,6 +72,13 @@ async def reverse_text(input: TextInput) -> dict[str, str]:
     """
     return {"original": input.text, "reversed": input.text[::-1]}
 
+@router.post("/uppercase", summary="Uppercase a string")
+async def uppercase_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and its uppercase version.
+    """
+    return {"original": input.text, "uppercased": input.text.upper()}
+
 
 @router.get("/uuid", summary="Generate a UUID v4")
 async def generate_uuid() -> dict[str, str]:
