@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime, timezone
 import time
+import random
 from pydantic import BaseModel
 from uuid import uuid4
 
@@ -87,3 +88,15 @@ async def generate_uuid() -> dict[str, str]:
     Example: GET /utils/uuid
     """
     return {"uuid": str(uuid4())}
+
+
+@router.get("/random-int", summary="Generate a random integer in [min, max]")
+async def random_int(min: int = 0, max: int = 100) -> dict[str, int]:
+    """
+    Returns a random integer between min and max (inclusive).
+    Example: GET /utils/random-int?min=10&max=20
+    """
+    if min > max:
+        raise HTTPException(status_code=400, detail="min must be <= max")
+    value = random.randint(min, max)
+    return {"min": min, "max": max, "value": value}
