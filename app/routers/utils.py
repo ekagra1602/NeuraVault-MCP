@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from datetime import datetime, timezone
 import time
 import random
+import hashlib
 from pydantic import BaseModel
 from uuid import uuid4
 
@@ -100,3 +101,12 @@ async def random_int(min: int = 0, max: int = 100) -> dict[str, int]:
         raise HTTPException(status_code=400, detail="min must be <= max")
     value = random.randint(min, max)
     return {"min": min, "max": max, "value": value}
+
+
+@router.post("/sha256", summary="Compute SHA-256 hash of text")
+async def sha256_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and its SHA-256 hex digest.
+    """
+    digest = hashlib.sha256(input.text.encode("utf-8")).hexdigest()
+    return {"original": input.text, "sha256": digest}
