@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import time
 import random
 import hashlib
+import re
 from pydantic import BaseModel
 from uuid import uuid4
 
@@ -80,6 +81,15 @@ async def uppercase_text(input: TextInput) -> dict[str, str]:
     Returns the original text and its uppercase version.
     """
     return {"original": input.text, "uppercased": input.text.upper()}
+
+@router.post("/slugify", summary="Slugify a string")
+async def slugify_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and a URL-friendly slug.
+    """
+    slug = re.sub(r"[^a-z0-9]+", "-", input.text.lower()).strip("-")
+    slug = re.sub(r"-{2,}", "-", slug)
+    return {"original": input.text, "slug": slug}
 
 
 @router.get("/uuid", summary="Generate a UUID v4")
