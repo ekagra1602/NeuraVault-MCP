@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import time
 import random
 import hashlib
-import re
+import base64
 from pydantic import BaseModel
 from uuid import uuid4
 
@@ -82,15 +82,6 @@ async def uppercase_text(input: TextInput) -> dict[str, str]:
     """
     return {"original": input.text, "uppercased": input.text.upper()}
 
-@router.post("/slugify", summary="Slugify a string")
-async def slugify_text(input: TextInput) -> dict[str, str]:
-    """
-    Returns the original text and a URL-friendly slug.
-    """
-    slug = re.sub(r"[^a-z0-9]+", "-", input.text.lower()).strip("-")
-    slug = re.sub(r"-{2,}", "-", slug)
-    return {"original": input.text, "slug": slug}
-
 
 @router.get("/uuid", summary="Generate a UUID v4")
 async def generate_uuid() -> dict[str, str]:
@@ -120,3 +111,12 @@ async def sha256_text(input: TextInput) -> dict[str, str]:
     """
     digest = hashlib.sha256(input.text.encode("utf-8")).hexdigest()
     return {"original": input.text, "sha256": digest}
+
+
+@router.post("/base64-encode", summary="Base64-encode a string")
+async def base64_encode(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and its Base64-encoded representation.
+    """
+    encoded = base64.b64encode(input.text.encode("utf-8")).decode("ascii")
+    return {"original": input.text, "base64": encoded}
