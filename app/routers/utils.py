@@ -4,6 +4,7 @@ import time
 import random
 import hashlib
 import base64
+import binascii
 from pydantic import BaseModel
 from uuid import uuid4
 
@@ -120,3 +121,16 @@ async def base64_encode(input: TextInput) -> dict[str, str]:
     """
     encoded = base64.b64encode(input.text.encode("utf-8")).decode("ascii")
     return {"original": input.text, "base64": encoded}
+
+
+@router.post("/base64-decode", summary="Base64-decode a string")
+async def base64_decode(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original Base64 text and its UTF-8 decoded representation.
+    """
+    try:
+        decoded_bytes = base64.b64decode(input.text.encode("ascii"), validate=True)
+        decoded_text = decoded_bytes.decode("utf-8")
+    except (binascii.Error, UnicodeDecodeError):
+        raise HTTPException(status_code=400, detail="Invalid Base64 input")
+    return {"original": input.text, "decoded": decoded_text}
