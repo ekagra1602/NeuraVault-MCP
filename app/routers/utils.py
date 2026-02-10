@@ -90,6 +90,13 @@ async def lowercase_text(input: TextInput) -> dict[str, str]:
     """
     return {"original": input.text, "lowercased": input.text.lower()}
 
+@router.post("/titlecase", summary="Titlecase a string")
+async def titlecase_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and its titlecased version.
+    """
+    return {"original": input.text, "titlecased": input.text.title()}
+
 
 @router.get("/uuid", summary="Generate a UUID v4")
 async def generate_uuid() -> dict[str, str]:
