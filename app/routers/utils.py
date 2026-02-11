@@ -148,3 +148,11 @@ async def base64_decode(input: TextInput) -> dict[str, str]:
     except (binascii.Error, UnicodeDecodeError):
         raise HTTPException(status_code=400, detail="Invalid Base64 input")
     return {"original": input.text, "decoded": decoded_text}
+
+
+@router.get("/ping", summary="Simple ping endpoint")
+async def ping() -> dict[str, str]:
+    """
+    Returns a simple pong response to verify the utils router is reachable.
+    """
+    return {"message": "pong"}
