@@ -98,6 +98,14 @@ async def titlecase_text(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "titlecased": input.text.title()}
 
 
+@router.post("/trim", summary="Trim whitespace from a string")
+async def trim_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and a trimmed version without leading/trailing whitespace.
+    """
+    return {"original": input.text, "trimmed": input.text.strip()}
+
+
 @router.get("/uuid", summary="Generate a UUID v4")
 async def generate_uuid() -> dict[str, str]:
     """
