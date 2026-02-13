@@ -106,6 +106,24 @@ async def trim_text(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "trimmed": input.text.strip()}
 
 
+@router.post("/repeat", summary="Repeat a string N times")
+async def repeat_text(input: TextInput, times: int = 2) -> dict[str, object]:
+    """
+    Returns the original text repeated N times.
+    """
+    if times < 1 or times > 20:
+        raise HTTPException(status_code=400, detail="times must be between 1 and 20")
+    return {"original": input.text, "times": times, "repeated": input.text * times}
+
+
+@router.post("/contains", summary="Check if text contains a substring")
+async def contains_text(input: TextInput, needle: str) -> dict[str, object]:
+    """
+    Returns whether the input text contains the provided substring.
+    """
+    return {"original": input.text, "needle": needle, "contains": needle in input.text}
+
+
 @router.post("/is-palindrome", summary="Check if text is a palindrome")
 async def is_palindrome_text(input: TextInput) -> dict[str, object]:
     """
