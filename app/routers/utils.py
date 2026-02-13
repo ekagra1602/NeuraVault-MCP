@@ -106,6 +106,15 @@ async def trim_text(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "trimmed": input.text.strip()}
 
 
+@router.post("/is-palindrome", summary="Check if text is a palindrome")
+async def is_palindrome_text(input: TextInput) -> dict[str, object]:
+    """
+    Returns whether the text is a palindrome, ignoring case and non-alphanumeric chars.
+    """
+    normalized = "".join(ch.lower() for ch in input.text if ch.isalnum())
+    return {"original": input.text, "normalized": normalized, "is_palindrome": normalized == normalized[::-1]}
+
+
 @router.get("/uuid", summary="Generate a UUID v4")
 async def generate_uuid() -> dict[str, str]:
     """
