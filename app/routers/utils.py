@@ -106,6 +106,16 @@ async def trim_text(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "trimmed": input.text.strip()}
 
 
+@router.post("/first-last", summary="Get first and last character")
+async def first_last_text(input: TextInput) -> dict[str, object]:
+    """
+    Returns first and last characters for non-empty text, otherwise null values.
+    """
+    if not input.text:
+        return {"original": input.text, "first": None, "last": None}
+    return {"original": input.text, "first": input.text[0], "last": input.text[-1]}
+
+
 @router.post("/repeat", summary="Repeat a string N times")
 async def repeat_text(input: TextInput, times: int = 2) -> dict[str, object]:
     """
