@@ -195,6 +195,14 @@ async def base64_decode(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "decoded": decoded_text}
 
 
+@router.post("/capitalize", summary="Capitalize first character only")
+async def capitalize_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and a version with only the first character capitalized.
+    """
+    return {"original": input.text, "capitalized": input.text.capitalize()}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
