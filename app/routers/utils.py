@@ -28,6 +28,16 @@ async def get_text_stats(input: TextInput):
     }
 
 
+@router.post("/unique-words", summary="Count unique words in text")
+async def unique_words(input: TextInput) -> dict[str, object]:
+    """
+    Returns the number of unique whitespace-separated words (case-insensitive) and the set itself.
+    """
+    words = [w for w in input.text.split() if w]
+    unique = sorted({w.lower() for w in words})
+    return {"original": input.text, "unique_count": len(unique), "unique_words": unique}
+
+
 @router.get("/add", summary="Add two numbers")
 async def add(a: float, b: float) -> dict[str, float]:
     """
