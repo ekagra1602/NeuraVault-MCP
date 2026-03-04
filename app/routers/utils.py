@@ -213,6 +213,14 @@ async def capitalize_text(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "capitalized": input.text.capitalize()}
 
 
+@router.post("/swapcase", summary="Swap case of each character")
+async def swapcase_text(input: TextInput) -> dict[str, str]:
+    """
+    Returns the original text and a version with each character's case swapped.
+    """
+    return {"original": input.text, "swapped": input.text.swapcase()}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
