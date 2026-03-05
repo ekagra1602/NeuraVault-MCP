@@ -221,6 +221,17 @@ async def swapcase_text(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "swapped": input.text.swapcase()}
 
 
+@router.get("/modulo", summary="Compute modulo of two integers")
+async def modulo(a: int, b: int) -> dict[str, int]:
+    """
+    Returns the remainder of a divided by b.
+    Example: GET /utils/modulo?a=17&b=5
+    """
+    if b == 0:
+        raise HTTPException(status_code=400, detail="Modulo by zero is not allowed")
+    return {"a": a, "b": b, "remainder": a % b}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
