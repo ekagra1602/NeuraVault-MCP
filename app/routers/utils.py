@@ -241,6 +241,15 @@ async def power(base: float, exp: float) -> dict[str, float]:
     return {"base": base, "exp": exp, "result": base ** exp}
 
 
+@router.post("/replace", summary="Replace occurrences in text")
+async def replace_text(input: TextInput, old: str = "", new: str = "") -> dict[str, str]:
+    """
+    Replaces all occurrences of 'old' with 'new' in the input text.
+    Example: POST /utils/replace?old=world&new=there  {"text":"hello world"}
+    """
+    return {"original": input.text, "old": old, "new": new, "result": input.text.replace(old, new)}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
