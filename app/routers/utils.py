@@ -232,6 +232,15 @@ async def modulo(a: int, b: int) -> dict[str, int]:
     return {"a": a, "b": b, "remainder": a % b}
 
 
+@router.get("/power", summary="Raise a number to a power")
+async def power(base: float, exp: float) -> dict[str, float]:
+    """
+    Returns base raised to the power of exp.
+    Example: GET /utils/power?base=2&exp=10
+    """
+    return {"base": base, "exp": exp, "result": base ** exp}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
