@@ -250,6 +250,16 @@ async def replace_text(input: TextInput, old: str = "", new: str = "") -> dict[s
     return {"original": input.text, "old": old, "new": new, "result": input.text.replace(old, new)}
 
 
+@router.post("/count-char", summary="Count occurrences of a character")
+async def count_char(input: TextInput, char: str = "") -> dict[str, object]:
+    """
+    Returns how many times a given character appears in the input text.
+    """
+    if len(char) != 1:
+        raise HTTPException(status_code=400, detail="char must be exactly one character")
+    return {"original": input.text, "char": char, "count": input.text.count(char)}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
