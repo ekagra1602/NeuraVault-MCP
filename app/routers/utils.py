@@ -260,6 +260,15 @@ async def count_char(input: TextInput, char: str = "") -> dict[str, object]:
     return {"original": input.text, "char": char, "count": input.text.count(char)}
 
 
+@router.get("/abs", summary="Absolute value of a number")
+async def absolute(n: float) -> dict[str, float]:
+    """
+    Returns the absolute value of the given number.
+    Example: GET /utils/abs?n=-42.5
+    """
+    return {"n": n, "absolute": abs(n)}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
