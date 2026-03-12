@@ -269,6 +269,21 @@ async def absolute(n: float) -> dict[str, float]:
     return {"n": n, "absolute": abs(n)}
 
 
+@router.get("/min-max", summary="Return min and max of a list of numbers")
+async def min_max(numbers: str) -> dict[str, object]:
+    """
+    Accepts a comma-separated string of numbers and returns the min and max.
+    Example: GET /utils/min-max?numbers=3,1,4,1,5,9
+    """
+    try:
+        vals = [float(n.strip()) for n in numbers.split(",") if n.strip()]
+    except ValueError:
+        raise HTTPException(status_code=400, detail="All values must be valid numbers")
+    if not vals:
+        raise HTTPException(status_code=400, detail="At least one number is required")
+    return {"numbers": vals, "min": min(vals), "max": max(vals)}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
