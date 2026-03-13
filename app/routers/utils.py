@@ -284,6 +284,16 @@ async def min_max(numbers: str) -> dict[str, object]:
     return {"numbers": vals, "min": min(vals), "max": max(vals)}
 
 
+@router.post("/split", summary="Split text by a delimiter")
+async def split_text(input: TextInput, delimiter: str = ",") -> dict[str, object]:
+    """
+    Splits input text by the given delimiter and returns the resulting list.
+    Example: POST /utils/split?delimiter=- {"text":"a-b-c"}
+    """
+    parts = input.text.split(delimiter)
+    return {"original": input.text, "delimiter": delimiter, "parts": parts, "count": len(parts)}
+
+
 @router.get("/ping", summary="Simple ping endpoint")
 async def ping() -> dict[str, str]:
     """
