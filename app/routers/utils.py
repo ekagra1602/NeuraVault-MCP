@@ -297,7 +297,7 @@ async def split_text(input: TextInput, delimiter: str = ",") -> dict[str, object
 @router.post("/join", summary="Join a list of strings with a delimiter")
 async def join_text(words: list[str], delimiter: str = ",") -> dict[str, object]:
     """
-    Joins the provided list of strings using the given delimiter.
+    Joins a list of strings using the given delimiter.
     Example: POST /utils/join?delimiter=- with body ["a","b","c"]
     """
     return {"words": words, "delimiter": delimiter, "result": delimiter.join(words)}
