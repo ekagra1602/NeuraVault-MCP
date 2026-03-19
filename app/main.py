@@ -26,6 +26,15 @@ def create_app() -> FastAPI:
         response.headers["X-Process-Time"] = f"{duration:.4f}s"
         return response
 
+    @app.get("/", summary="API root", tags=["Root"])
+    async def root() -> dict[str, object]:
+        """Return a welcome message and list of available route groups."""
+        return {
+            "name": settings.app_name,
+            "routes": ["/health", "/memory", "/utils"],
+            "docs": "/docs",
+        }
+
     # Expose OpenAI plugin manifest so the server can be registered as a ChatGPT / LLM plugin
     @app.get("/.well-known/ai-plugin.json", include_in_schema=False)
     async def plugin_manifest() -> dict[str, object]:
