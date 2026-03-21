@@ -18,3 +18,9 @@ async def health_details() -> dict[str, object]:
     """Returns server uptime in seconds and the API version."""
     uptime = round(time.time() - _start_time, 2)
     return {"status": "ok", "uptime_seconds": uptime, "version": "1.0.0"}
+
+
+@router.get("/live", summary="Liveness probe")
+async def health_live() -> dict[str, str]:
+    """Minimal response for load balancers and orchestrators (e.g. Kubernetes liveness)."""
+    return {"status": "alive"}
