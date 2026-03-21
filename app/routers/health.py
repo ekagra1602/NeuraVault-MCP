@@ -2,6 +2,8 @@ import time
 
 from fastapi import APIRouter
 
+from ..formatting import seconds_as_compact_label
+
 router = APIRouter(prefix="/health", tags=["Health"])
 
 _start_time = time.time()
@@ -17,7 +19,12 @@ async def health_check() -> dict[str, str]:
 async def health_details() -> dict[str, object]:
     """Returns server uptime in seconds and the API version."""
     uptime = round(time.time() - _start_time, 2)
-    return {"status": "ok", "uptime_seconds": uptime, "version": "1.0.0"}
+    return {
+        "status": "ok",
+        "uptime_seconds": uptime,
+        "uptime_label": seconds_as_compact_label(uptime),
+        "version": "1.0.0",
+    }
 
 
 @router.get("/live", summary="Liveness probe")
