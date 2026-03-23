@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from datetime import datetime, timezone
 import time
 import random
@@ -7,6 +7,8 @@ import base64
 import binascii
 from pydantic import BaseModel
 from uuid import uuid4
+
+from ..formatting import collapse_whitespace, truncate_plain
 
 router = APIRouter(
     prefix="/utils",
@@ -301,6 +303,20 @@ async def join_text(words: list[str], delimiter: str = ",") -> dict[str, object]
     Example: POST /utils/join?delimiter=- with body ["a","b","c"]
     """
     return {"words": words, "delimiter": delimiter, "result": delimiter.join(words)}
+
+
+@router.post("/truncate", summary="Truncate text to a max length")
+async def truncate_endpoint(
+    input: TextInput,
+    max_len: int = Query(80, ge=1, le=10_000, description="Maximum number of characters to keep"),
+) -> dict[str, object]:
+    out = truncate_plain(input.text, max_len)
+    return {"original": input.text, "max_len": max_len, "truncated": out}
+
+
+@router.post("/collapse-space", summary="Collapse internal whitespace to single spaces")
+async def collapse_space_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "collapsed": collapse_whitespace(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

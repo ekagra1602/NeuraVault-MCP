@@ -15,3 +15,19 @@ def seconds_as_compact_label(total_seconds: float) -> str:
         return f'{minutes}m{sec}s'
     hours, rest_m = divmod(minutes, 60)
     return f'{hours}h{rest_m}m{sec}s'
+
+
+def truncate_plain(text: str, max_len: int) -> str:
+    """Cut text to max_len chars; if shortened, append an ellipsis (one unicode char)."""
+    if max_len < 1:
+        return ''
+    if len(text) <= max_len:
+        return text
+    if max_len == 1:
+        return text[0]
+    return text[: max_len - 1] + '…'
+
+
+def collapse_whitespace(text: str) -> str:
+    """Replace any run of whitespace with single spaces and strip ends."""
+    return ' '.join(text.split())
