@@ -31,3 +31,12 @@ def truncate_plain(text: str, max_len: int) -> str:
 def collapse_whitespace(text: str) -> str:
     """Replace any run of whitespace with single spaces and strip ends."""
     return ' '.join(text.split())
+
+
+def line_statistics(text: str) -> dict[str, int]:
+    """Count lines from splitlines(); non_blank ignores whitespace-only lines."""
+    lines = text.splitlines()
+    return {
+        'total_lines': len(lines),
+        'non_blank_lines': sum(1 for ln in lines if ln.strip()),
+    }

@@ -8,7 +8,7 @@ import binascii
 from pydantic import BaseModel
 from uuid import uuid4
 
-from ..formatting import collapse_whitespace, truncate_plain
+from ..formatting import collapse_whitespace, line_statistics, truncate_plain
 
 router = APIRouter(
     prefix="/utils",
@@ -317,6 +317,12 @@ async def truncate_endpoint(
 @router.post("/collapse-space", summary="Collapse internal whitespace to single spaces")
 async def collapse_space_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "collapsed": collapse_whitespace(input.text)}
+
+
+@router.post("/line-stats", summary="Count lines and non-blank lines in text")
+async def line_stats_endpoint(input: TextInput) -> dict[str, object]:
+    stats = line_statistics(input.text)
+    return {"original": input.text, **stats}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
