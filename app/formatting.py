@@ -40,3 +40,8 @@ def line_statistics(text: str) -> dict[str, int]:
         'total_lines': len(lines),
         'non_blank_lines': sum(1 for ln in lines if ln.strip()),
     }
+
+
+def normalize_newlines(text: str) -> str:
+    """Convert CRLF and lone CR to LF for consistent cross-platform text."""
+    return text.replace('\r\n', '\n').replace('\r', '\n')

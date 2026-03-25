@@ -8,7 +8,12 @@ import binascii
 from pydantic import BaseModel
 from uuid import uuid4
 
-from ..formatting import collapse_whitespace, line_statistics, truncate_plain
+from ..formatting import (
+    collapse_whitespace,
+    line_statistics,
+    normalize_newlines,
+    truncate_plain,
+)
 
 router = APIRouter(
     prefix="/utils",
@@ -323,6 +328,11 @@ async def collapse_space_endpoint(input: TextInput) -> dict[str, str]:
 async def line_stats_endpoint(input: TextInput) -> dict[str, object]:
     stats = line_statistics(input.text)
     return {"original": input.text, **stats}
+
+
+@router.post("/normalize-newlines", summary="Normalize line endings to LF")
+async def normalize_newlines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "normalized": normalize_newlines(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
