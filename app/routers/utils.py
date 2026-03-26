@@ -13,6 +13,7 @@ from ..formatting import (
     line_statistics,
     normalize_newlines,
     truncate_plain,
+    utf8_byte_length,
 )
 
 router = APIRouter(
@@ -333,6 +334,15 @@ async def line_stats_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
 async def normalize_newlines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "normalized": normalize_newlines(input.text)}
+
+
+@router.post("/utf8-byte-length", summary="UTF-8 encoded byte length of text")
+async def utf8_byte_length_endpoint(input: TextInput) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "char_length": len(input.text),
+        "utf8_byte_length": utf8_byte_length(input.text),
+    }
 
 
 @router.get("/ping", summary="Simple ping endpoint")

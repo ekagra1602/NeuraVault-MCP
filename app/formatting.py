@@ -45,3 +45,8 @@ def line_statistics(text: str) -> dict[str, int]:
 def normalize_newlines(text: str) -> str:
     """Convert CRLF and lone CR to LF for consistent cross-platform text."""
     return text.replace('\r\n', '\n').replace('\r', '\n')
+
+
+def utf8_byte_length(text: str) -> int:
+    """Length of the string when encoded as UTF-8 (not the same as len(text) for non-ASCII)."""
+    return len(text.encode('utf-8'))
