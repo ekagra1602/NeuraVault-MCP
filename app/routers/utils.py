@@ -12,6 +12,7 @@ from ..formatting import (
     collapse_whitespace,
     line_statistics,
     normalize_newlines,
+    reverse_word_order,
     truncate_plain,
     utf8_byte_length,
 )
@@ -343,6 +344,11 @@ async def utf8_byte_length_endpoint(input: TextInput) -> dict[str, object]:
         "char_length": len(input.text),
         "utf8_byte_length": utf8_byte_length(input.text),
     }
+
+
+@router.post("/reverse-word-order", summary="Reverse order of whitespace-separated words")
+async def reverse_word_order_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "reversed_words": reverse_word_order(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

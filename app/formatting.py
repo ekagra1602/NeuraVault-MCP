@@ -50,3 +50,8 @@ def normalize_newlines(text: str) -> str:
 def utf8_byte_length(text: str) -> int:
     """Length of the string when encoded as UTF-8 (not the same as len(text) for non-ASCII)."""
     return len(text.encode('utf-8'))
+
+
+def reverse_word_order(text: str) -> str:
+    """Split on arbitrary whitespace, reverse token order, join with single spaces."""
+    return ' '.join(reversed(text.split()))
