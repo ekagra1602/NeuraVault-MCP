@@ -55,3 +55,8 @@ def utf8_byte_length(text: str) -> int:
 def reverse_word_order(text: str) -> str:
     """Split on arbitrary whitespace, reverse token order, join with single spaces."""
     return ' '.join(reversed(text.split()))
+
+
+def hex_encode_utf8(text: str) -> str:
+    """Lowercase hex string of the UTF-8 byte representation (two hex chars per byte)."""
+    return text.encode('utf-8').hex()

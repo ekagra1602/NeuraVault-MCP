@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from ..formatting import (
     collapse_whitespace,
+    hex_encode_utf8,
     line_statistics,
     normalize_newlines,
     reverse_word_order,
@@ -349,6 +350,11 @@ async def utf8_byte_length_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/reverse-word-order", summary="Reverse order of whitespace-separated words")
 async def reverse_word_order_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "reversed_words": reverse_word_order(input.text)}
+
+
+@router.post("/utf8-hex", summary="Hex-encode UTF-8 bytes of text")
+async def utf8_hex_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "hex": hex_encode_utf8(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
