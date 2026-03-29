@@ -60,3 +60,11 @@ def reverse_word_order(text: str) -> str:
 def hex_encode_utf8(text: str) -> str:
     """Lowercase hex string of the UTF-8 byte representation (two hex chars per byte)."""
     return text.encode('utf-8').hex()
+
+
+def pad_left(text: str, width: int, fill_char: str) -> str:
+    """Pad on the left until len(text) >= width using repeated fill_char (caller should pass len(fill_char)==1)."""
+    if width <= len(text):
+        return text
+    gap = width - len(text)
+    return (fill_char * gap) + text

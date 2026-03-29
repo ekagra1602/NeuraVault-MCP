@@ -13,6 +13,7 @@ from ..formatting import (
     hex_encode_utf8,
     line_statistics,
     normalize_newlines,
+    pad_left,
     reverse_word_order,
     truncate_plain,
     utf8_byte_length,
@@ -355,6 +356,20 @@ async def reverse_word_order_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/utf8-hex", summary="Hex-encode UTF-8 bytes of text")
 async def utf8_hex_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "hex": hex_encode_utf8(input.text)}
+
+
+@router.post("/pad-left", summary="Left-pad text to a minimum width")
+async def pad_left_endpoint(
+    input: TextInput,
+    width: int = Query(..., ge=1, le=1_000_000, description="Minimum resulting string length"),
+    fill: str = Query(" ", description="Single character to repeat for padding", min_length=1, max_length=1),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "width": width,
+        "fill": fill,
+        "padded": pad_left(input.text, width, fill),
+    }
 
 
 @router.get("/ping", summary="Simple ping endpoint")
