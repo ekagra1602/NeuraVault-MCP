@@ -76,3 +76,21 @@ def pad_right(text: str, width: int, fill_char: str) -> str:
         return text
     gap = width - len(text)
     return text + (fill_char * gap)
+
+
+def strip_optional_prefix(text: str, prefix: str) -> str:
+    """Remove leading prefix once if present; empty prefix leaves text unchanged."""
+    if not prefix:
+        return text
+    if text.startswith(prefix):
+        return text[len(prefix) :]
+    return text
+
+
+def strip_optional_suffix(text: str, suffix: str) -> str:
+    """Remove trailing suffix once if present; empty suffix leaves text unchanged."""
+    if not suffix:
+        return text
+    if text.endswith(suffix):
+        return text[: -len(suffix)]
+    return text

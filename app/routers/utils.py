@@ -16,6 +16,8 @@ from ..formatting import (
     pad_left,
     pad_right,
     reverse_word_order,
+    strip_optional_prefix,
+    strip_optional_suffix,
     truncate_plain,
     utf8_byte_length,
 )
@@ -384,6 +386,30 @@ async def pad_right_endpoint(
         "width": width,
         "fill": fill,
         "padded": pad_right(input.text, width, fill),
+    }
+
+
+@router.post("/strip-prefix", summary="Remove leading prefix if present")
+async def strip_prefix_endpoint(
+    input: TextInput,
+    prefix: str = Query("", description="Prefix to remove once when it matches the start"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "prefix": prefix,
+        "stripped": strip_optional_prefix(input.text, prefix),
+    }
+
+
+@router.post("/strip-suffix", summary="Remove trailing suffix if present")
+async def strip_suffix_endpoint(
+    input: TextInput,
+    suffix: str = Query("", description="Suffix to remove once when it matches the end"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "suffix": suffix,
+        "stripped": strip_optional_suffix(input.text, suffix),
     }
 
 
