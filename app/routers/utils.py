@@ -14,6 +14,7 @@ from ..formatting import (
     line_statistics,
     normalize_newlines,
     pad_left,
+    pad_right,
     reverse_word_order,
     truncate_plain,
     utf8_byte_length,
@@ -369,6 +370,20 @@ async def pad_left_endpoint(
         "width": width,
         "fill": fill,
         "padded": pad_left(input.text, width, fill),
+    }
+
+
+@router.post("/pad-right", summary="Right-pad text to a minimum width")
+async def pad_right_endpoint(
+    input: TextInput,
+    width: int = Query(..., ge=1, le=1_000_000, description="Minimum resulting string length"),
+    fill: str = Query(" ", description="Single character to repeat for padding", min_length=1, max_length=1),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "width": width,
+        "fill": fill,
+        "padded": pad_right(input.text, width, fill),
     }
 
 

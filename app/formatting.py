@@ -68,3 +68,11 @@ def pad_left(text: str, width: int, fill_char: str) -> str:
         return text
     gap = width - len(text)
     return (fill_char * gap) + text
+
+
+def pad_right(text: str, width: int, fill_char: str) -> str:
+    """Pad on the right until len(text) >= width using repeated fill_char (caller should pass len(fill_char)==1)."""
+    if width <= len(text):
+        return text
+    gap = width - len(text)
+    return text + (fill_char * gap)
