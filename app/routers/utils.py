@@ -13,6 +13,7 @@ from ..formatting import (
     hex_encode_utf8,
     line_statistics,
     normalize_newlines,
+    pad_center,
     pad_left,
     pad_right,
     reverse_word_order,
@@ -410,6 +411,20 @@ async def strip_suffix_endpoint(
         "original": input.text,
         "suffix": suffix,
         "stripped": strip_optional_suffix(input.text, suffix),
+    }
+
+
+@router.post("/pad-center", summary="Center-pad text to a minimum width")
+async def pad_center_endpoint(
+    input: TextInput,
+    width: int = Query(..., ge=1, le=1_000_000, description="Minimum resulting string length"),
+    fill: str = Query(" ", description="Single character to repeat for padding", min_length=1, max_length=1),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "width": width,
+        "fill": fill,
+        "padded": pad_center(input.text, width, fill),
     }
 
 

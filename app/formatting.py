@@ -78,6 +78,16 @@ def pad_right(text: str, width: int, fill_char: str) -> str:
     return text + (fill_char * gap)
 
 
+def pad_center(text: str, width: int, fill_char: str) -> str:
+    """Pad both sides until len(text) >= width; leftover space goes to the right when odd."""
+    if width <= len(text):
+        return text
+    total_gap = width - len(text)
+    left = total_gap // 2
+    right = total_gap - left
+    return (fill_char * left) + text + (fill_char * right)
+
+
 def strip_optional_prefix(text: str, prefix: str) -> str:
     """Remove leading prefix once if present; empty prefix leaves text unchanged."""
     if not prefix:
