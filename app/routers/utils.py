@@ -20,6 +20,7 @@ from ..formatting import (
     strip_optional_prefix,
     strip_optional_suffix,
     truncate_plain,
+    url_quote_utf8,
     utf8_byte_length,
 )
 
@@ -425,6 +426,21 @@ async def pad_center_endpoint(
         "width": width,
         "fill": fill,
         "padded": pad_center(input.text, width, fill),
+    }
+
+
+@router.post("/url-quote", summary="Percent-encode text for URLs (UTF-8)")
+async def url_quote_endpoint(
+    input: TextInput,
+    safe: str = Query(
+        "",
+        description="Characters that must not be encoded (e.g. use /.-_ for path-like text)",
+    ),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "safe": safe,
+        "quoted": url_quote_utf8(input.text, safe),
     }
 
 
