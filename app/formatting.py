@@ -1,6 +1,6 @@
 # Shared text/formatting helpers (no HTTP layer).
 
-from urllib.parse import quote as _percent_quote
+from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
 
 
 def seconds_as_compact_label(total_seconds: float) -> str:
@@ -111,3 +111,11 @@ def strip_optional_suffix(text: str, suffix: str) -> str:
 def url_quote_utf8(text: str, safe: str = '') -> str:
     """Percent-encode for URLs using UTF-8; characters listed in safe are left as-is."""
     return _percent_quote(text, safe=safe, encoding='utf-8')
+
+
+def url_unquote_utf8(text: str) -> str:
+    """
+    Decode percent-encoded octets as UTF-8. Uses strict error handling so invalid
+    %-sequences or non-UTF-8 byte runs surface as UnicodeDecodeError to callers.
+    """
+    return _percent_unquote(text, encoding='utf-8', errors='strict')

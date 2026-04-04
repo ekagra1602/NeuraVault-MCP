@@ -21,6 +21,7 @@ from ..formatting import (
     strip_optional_suffix,
     truncate_plain,
     url_quote_utf8,
+    url_unquote_utf8,
     utf8_byte_length,
 )
 
@@ -442,6 +443,18 @@ async def url_quote_endpoint(
         "safe": safe,
         "quoted": url_quote_utf8(input.text, safe),
     }
+
+
+@router.post("/url-unquote", summary="Decode percent-encoded URL component (UTF-8, strict)")
+async def url_unquote_endpoint(input: TextInput) -> dict[str, str]:
+    try:
+        decoded = url_unquote_utf8(input.text)
+    except UnicodeDecodeError:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid percent-encoding or not valid UTF-8 after decoding",
+        )
+    return {"original": input.text, "decoded": decoded}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
