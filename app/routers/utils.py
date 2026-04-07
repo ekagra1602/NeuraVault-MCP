@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from ..formatting import (
     collapse_whitespace,
+    escape_html,
     hex_encode_utf8,
     line_statistics,
     normalize_newlines,
@@ -455,6 +456,11 @@ async def url_unquote_endpoint(input: TextInput) -> dict[str, str]:
             detail="Invalid percent-encoding or not valid UTF-8 after decoding",
         )
     return {"original": input.text, "decoded": decoded}
+
+
+@router.post("/html-escape", summary="Escape text for safe HTML embedding")
+async def html_escape_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "escaped": escape_html(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

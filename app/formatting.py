@@ -1,5 +1,6 @@
 # Shared text/formatting helpers (no HTTP layer).
 
+import html as _html
 from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
 
 
@@ -119,3 +120,8 @@ def url_unquote_utf8(text: str) -> str:
     %-sequences or non-UTF-8 byte runs surface as UnicodeDecodeError to callers.
     """
     return _percent_unquote(text, encoding='utf-8', errors='strict')
+
+
+def escape_html(text: str) -> str:
+    """Escape &, <, >, and double quotes for safe use in HTML text or attributes."""
+    return _html.escape(text, quote=True)
