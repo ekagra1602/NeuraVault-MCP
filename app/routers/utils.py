@@ -18,6 +18,7 @@ from ..formatting import (
     pad_left,
     pad_right,
     reverse_word_order,
+    rot13,
     strip_optional_prefix,
     strip_optional_suffix,
     truncate_plain,
@@ -461,6 +462,11 @@ async def url_unquote_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/html-escape", summary="Escape text for safe HTML embedding")
 async def html_escape_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "escaped": escape_html(input.text)}
+
+
+@router.post("/rot13", summary="Apply ROT13 cipher to text")
+async def rot13_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "rot13": rot13(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

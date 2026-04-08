@@ -1,5 +1,6 @@
 # Shared text/formatting helpers (no HTTP layer).
 
+import codecs as _codecs
 import html as _html
 from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
 
@@ -125,3 +126,8 @@ def url_unquote_utf8(text: str) -> str:
 def escape_html(text: str) -> str:
     """Escape &, <, >, and double quotes for safe use in HTML text or attributes."""
     return _html.escape(text, quote=True)
+
+
+def rot13(text: str) -> str:
+    """Apply ROT13 to ASCII letters; digits and symbols unchanged. Self-inverse."""
+    return _codecs.decode(text, 'rot_13')
