@@ -12,6 +12,7 @@ from ..formatting import (
     collapse_whitespace,
     escape_html,
     hex_encode_utf8,
+    json_string_literal,
     line_statistics,
     normalize_newlines,
     pad_center,
@@ -467,6 +468,11 @@ async def html_escape_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/rot13", summary="Apply ROT13 cipher to text")
 async def rot13_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "rot13": rot13(input.text)}
+
+
+@router.post("/json-string", summary="Encode text as a JSON string literal")
+async def json_string_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "json": json_string_literal(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

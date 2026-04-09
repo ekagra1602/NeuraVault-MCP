@@ -2,6 +2,7 @@
 
 import codecs as _codecs
 import html as _html
+import json as _json
 from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
 
 
@@ -131,3 +132,8 @@ def escape_html(text: str) -> str:
 def rot13(text: str) -> str:
     """Apply ROT13 to ASCII letters; digits and symbols unchanged. Self-inverse."""
     return _codecs.decode(text, 'rot_13')
+
+
+def json_string_literal(text: str) -> str:
+    """Encode as a JSON string token (quotes, escapes, and Unicode as needed)."""
+    return _json.dumps(text, ensure_ascii=False)
