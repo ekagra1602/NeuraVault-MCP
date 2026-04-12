@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from ..formatting import (
     collapse_whitespace,
+    crc32_hex_utf8,
     escape_html,
     hex_encode_utf8,
     json_string_literal,
@@ -473,6 +474,11 @@ async def rot13_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/json-string", summary="Encode text as a JSON string literal")
 async def json_string_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "json": json_string_literal(input.text)}
+
+
+@router.post("/crc32", summary="CRC-32 checksum of UTF-8 bytes (hex)")
+async def crc32_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "crc32_hex": crc32_hex_utf8(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

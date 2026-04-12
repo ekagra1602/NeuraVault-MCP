@@ -3,6 +3,7 @@
 import codecs as _codecs
 import html as _html
 import json as _json
+import zlib as _zlib
 from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
 
 
@@ -137,3 +138,9 @@ def rot13(text: str) -> str:
 def json_string_literal(text: str) -> str:
     """Encode as a JSON string token (quotes, escapes, and Unicode as needed)."""
     return _json.dumps(text, ensure_ascii=False)
+
+
+def crc32_hex_utf8(text: str) -> str:
+    """CRC-32 over UTF-8 bytes; return 8 lowercase hex digits (IEEE polynomial)."""
+    n = _zlib.crc32(text.encode('utf-8')) & 0xFFFFFFFF
+    return f'{n:08x}'
