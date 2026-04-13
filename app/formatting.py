@@ -144,3 +144,8 @@ def crc32_hex_utf8(text: str) -> str:
     """CRC-32 over UTF-8 bytes; return 8 lowercase hex digits (IEEE polynomial)."""
     n = _zlib.crc32(text.encode('utf-8')) & 0xFFFFFFFF
     return f'{n:08x}'
+
+
+def reverse_lines(text: str) -> str:
+    """Reverse order of lines (splitlines); join with LF only. Trailing newline not preserved."""
+    return '\n'.join(reversed(text.splitlines()))

@@ -19,6 +19,7 @@ from ..formatting import (
     pad_center,
     pad_left,
     pad_right,
+    reverse_lines,
     reverse_word_order,
     rot13,
     strip_optional_prefix,
@@ -479,6 +480,11 @@ async def json_string_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/crc32", summary="CRC-32 checksum of UTF-8 bytes (hex)")
 async def crc32_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "crc32_hex": crc32_hex_utf8(input.text)}
+
+
+@router.post("/reverse-lines", summary="Reverse order of lines in text")
+async def reverse_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "reversed_lines": reverse_lines(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
