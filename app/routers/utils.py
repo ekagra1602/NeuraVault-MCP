@@ -22,6 +22,7 @@ from ..formatting import (
     reverse_lines,
     reverse_word_order,
     rot13,
+    sort_lines,
     strip_optional_prefix,
     strip_optional_suffix,
     truncate_plain,
@@ -485,6 +486,11 @@ async def crc32_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/reverse-lines", summary="Reverse order of lines in text")
 async def reverse_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "reversed_lines": reverse_lines(input.text)}
+
+
+@router.post("/sort-lines", summary="Sort lines lexicographically")
+async def sort_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "sorted_lines": sort_lines(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

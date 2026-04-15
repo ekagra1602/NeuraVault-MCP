@@ -149,3 +149,8 @@ def crc32_hex_utf8(text: str) -> str:
 def reverse_lines(text: str) -> str:
     """Reverse order of lines (splitlines); join with LF only. Trailing newline not preserved."""
     return '\n'.join(reversed(text.splitlines()))
+
+
+def sort_lines(text: str) -> str:
+    """Sort lines lexicographically (splitlines); join with LF. Empty input yields empty string."""
+    return '\n'.join(sorted(text.splitlines()))
