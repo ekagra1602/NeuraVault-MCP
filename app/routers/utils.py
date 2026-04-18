@@ -28,6 +28,7 @@ from ..formatting import (
     truncate_plain,
     url_quote_utf8,
     url_unquote_utf8,
+    unique_lines,
     utf8_byte_length,
 )
 
@@ -491,6 +492,11 @@ async def reverse_lines_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/sort-lines", summary="Sort lines lexicographically")
 async def sort_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "sorted_lines": sort_lines(input.text)}
+
+
+@router.post("/unique-lines", summary="Remove duplicate lines, keep first occurrence order")
+async def unique_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "unique_lines": unique_lines(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

@@ -154,3 +154,8 @@ def reverse_lines(text: str) -> str:
 def sort_lines(text: str) -> str:
     """Sort lines lexicographically (splitlines); join with LF. Empty input yields empty string."""
     return '\n'.join(sorted(text.splitlines()))
+
+
+def unique_lines(text: str) -> str:
+    """Drop duplicate lines; keep first occurrence order (splitlines; rejoin with LF)."""
+    return '\n'.join(dict.fromkeys(text.splitlines()))
