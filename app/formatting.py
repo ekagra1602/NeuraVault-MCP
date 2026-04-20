@@ -3,6 +3,7 @@
 import codecs as _codecs
 import html as _html
 import json as _json
+import textwrap as _textwrap
 import zlib as _zlib
 from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
 
@@ -159,3 +160,9 @@ def sort_lines(text: str) -> str:
 def unique_lines(text: str) -> str:
     """Drop duplicate lines; keep first occurrence order (splitlines; rejoin with LF)."""
     return '\n'.join(dict.fromkeys(text.splitlines()))
+
+
+def fill_wrapped(text: str, width: int) -> str:
+    """Reflow text like a paragraph (textwrap.fill); width clamped to 1..500."""
+    w = max(1, min(width, 500))
+    return _textwrap.fill(text, width=w, break_long_words=True, break_on_hyphens=True)

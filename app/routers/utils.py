@@ -12,6 +12,7 @@ from ..formatting import (
     collapse_whitespace,
     crc32_hex_utf8,
     escape_html,
+    fill_wrapped,
     hex_encode_utf8,
     json_string_literal,
     line_statistics,
@@ -497,6 +498,18 @@ async def sort_lines_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/unique-lines", summary="Remove duplicate lines, keep first occurrence order")
 async def unique_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "unique_lines": unique_lines(input.text)}
+
+
+@router.post("/fill-wrap", summary="Reflow text to a maximum line width (textwrap)")
+async def fill_wrap_endpoint(
+    input: TextInput,
+    width: int = Query(72, ge=1, le=500, description="Target maximum line width"),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "width": width,
+        "filled": fill_wrapped(input.text, width),
+    }
 
 
 @router.get("/ping", summary="Simple ping endpoint")
