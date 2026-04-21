@@ -166,3 +166,9 @@ def fill_wrapped(text: str, width: int) -> str:
     """Reflow text like a paragraph (textwrap.fill); width clamped to 1..500."""
     w = max(1, min(width, 500))
     return _textwrap.fill(text, width=w, break_long_words=True, break_on_hyphens=True)
+
+
+def expand_tabs(text: str, tabsize: int) -> str:
+    """Replace tab characters with spaces; tabsize clamped to 1..32."""
+    ts = max(1, min(tabsize, 32))
+    return text.expandtabs(ts)

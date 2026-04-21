@@ -12,6 +12,7 @@ from ..formatting import (
     collapse_whitespace,
     crc32_hex_utf8,
     escape_html,
+    expand_tabs,
     fill_wrapped,
     hex_encode_utf8,
     json_string_literal,
@@ -509,6 +510,18 @@ async def fill_wrap_endpoint(
         "original": input.text,
         "width": width,
         "filled": fill_wrapped(input.text, width),
+    }
+
+
+@router.post("/expand-tabs", summary="Expand tab characters to spaces")
+async def expand_tabs_endpoint(
+    input: TextInput,
+    tabsize: int = Query(8, ge=1, le=32, description="Spaces per tab stop"),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "tabsize": tabsize,
+        "expanded": expand_tabs(input.text, tabsize),
     }
 
 
