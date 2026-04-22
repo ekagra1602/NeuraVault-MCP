@@ -172,3 +172,9 @@ def expand_tabs(text: str, tabsize: int) -> str:
     """Replace tab characters with spaces; tabsize clamped to 1..32."""
     ts = max(1, min(tabsize, 32))
     return text.expandtabs(ts)
+
+
+def zfill_to_width(text: str, width: int) -> str:
+    """Left-pad numeric strings with zeros (str.zfill); width clamped 1..10_000."""
+    w = max(1, min(width, 10_000))
+    return text.zfill(w)

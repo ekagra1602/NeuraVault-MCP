@@ -32,6 +32,7 @@ from ..formatting import (
     url_unquote_utf8,
     unique_lines,
     utf8_byte_length,
+    zfill_to_width,
 )
 
 router = APIRouter(
@@ -522,6 +523,18 @@ async def expand_tabs_endpoint(
         "original": input.text,
         "tabsize": tabsize,
         "expanded": expand_tabs(input.text, tabsize),
+    }
+
+
+@router.post("/zfill", summary="Left-pad with zeros to a minimum width (str.zfill)")
+async def zfill_endpoint(
+    input: TextInput,
+    width: int = Query(8, ge=1, le=10_000, description="Minimum string width"),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "width": width,
+        "zfilled": zfill_to_width(input.text, width),
     }
 
 
