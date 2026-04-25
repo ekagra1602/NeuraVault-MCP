@@ -183,3 +183,8 @@ def zfill_to_width(text: str, width: int) -> str:
 def remove_blank_lines(text: str) -> str:
     """Drop lines that are empty or whitespace-only (splitlines; rejoin with LF)."""
     return '\n'.join(line for line in text.splitlines() if line.strip())
+
+
+def casefold_text(text: str) -> str:
+    """Unicode case folding (str.casefold); stronger than lower() for comparisons."""
+    return text.casefold()

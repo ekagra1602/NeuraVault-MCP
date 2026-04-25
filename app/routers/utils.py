@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from uuid import uuid4
 
 from ..formatting import (
+    casefold_text,
     collapse_whitespace,
     crc32_hex_utf8,
     escape_html,
@@ -542,6 +543,11 @@ async def zfill_endpoint(
 @router.post("/remove-blank-lines", summary="Remove empty and whitespace-only lines")
 async def remove_blank_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "text": remove_blank_lines(input.text)}
+
+
+@router.post("/casefold", summary="Unicode case folding for case-insensitive matching")
+async def casefold_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "casefolded": casefold_text(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
