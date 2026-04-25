@@ -188,3 +188,9 @@ def remove_blank_lines(text: str) -> str:
 def casefold_text(text: str) -> str:
     """Unicode case folding (str.casefold); stronger than lower() for comparisons."""
     return text.casefold()
+
+
+def count_vowels(text: str) -> int:
+    """Count ASCII vowels in the text, treating uppercase and lowercase equally."""
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    return sum(1 for ch in text.casefold() if ch in vowels)

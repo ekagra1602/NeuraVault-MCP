@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from ..formatting import (
     casefold_text,
+    count_vowels,
     collapse_whitespace,
     crc32_hex_utf8,
     escape_html,
@@ -350,6 +351,11 @@ async def collapse_space_endpoint(input: TextInput) -> dict[str, str]:
 async def line_stats_endpoint(input: TextInput) -> dict[str, object]:
     stats = line_statistics(input.text)
     return {"original": input.text, **stats}
+
+
+@router.post("/vowel-count", summary="Count ASCII vowels in text")
+async def vowel_count_endpoint(input: TextInput) -> dict[str, object]:
+    return {"original": input.text, "vowel_count": count_vowels(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
