@@ -178,3 +178,8 @@ def zfill_to_width(text: str, width: int) -> str:
     """Left-pad numeric strings with zeros (str.zfill); width clamped 1..10_000."""
     w = max(1, min(width, 10_000))
     return text.zfill(w)
+
+
+def remove_blank_lines(text: str) -> str:
+    """Drop lines that are empty or whitespace-only (splitlines; rejoin with LF)."""
+    return '\n'.join(line for line in text.splitlines() if line.strip())

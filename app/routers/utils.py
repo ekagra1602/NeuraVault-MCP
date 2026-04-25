@@ -21,6 +21,7 @@ from ..formatting import (
     pad_center,
     pad_left,
     pad_right,
+    remove_blank_lines,
     reverse_lines,
     reverse_word_order,
     rot13,
@@ -536,6 +537,11 @@ async def zfill_endpoint(
         "width": width,
         "zfilled": zfill_to_width(input.text, width),
     }
+
+
+@router.post("/remove-blank-lines", summary="Remove empty and whitespace-only lines")
+async def remove_blank_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "text": remove_blank_lines(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
