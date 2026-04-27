@@ -194,3 +194,9 @@ def count_vowels(text: str) -> int:
     """Count ASCII vowels in the text, treating uppercase and lowercase equally."""
     vowels = {'a', 'e', 'i', 'o', 'u'}
     return sum(1 for ch in text.casefold() if ch in vowels)
+
+
+def count_consonants(text: str) -> int:
+    """Count ASCII consonants (a-z minus vowels), treating case equally."""
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    return sum(1 for ch in text.casefold() if 'a' <= ch <= 'z' and ch not in vowels)
