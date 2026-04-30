@@ -11,6 +11,7 @@ from uuid import uuid4
 from ..formatting import (
     casefold_text,
     count_consonants,
+    count_digits,
     count_vowels,
     collapse_whitespace,
     crc32_hex_utf8,
@@ -362,6 +363,11 @@ async def vowel_count_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/consonant-count", summary="Count ASCII consonants in text")
 async def consonant_count_endpoint(input: TextInput) -> dict[str, object]:
     return {"original": input.text, "consonant_count": count_consonants(input.text)}
+
+
+@router.post("/digit-count", summary="Count ASCII digits in text")
+async def digit_count_endpoint(input: TextInput) -> dict[str, object]:
+    return {"original": input.text, "digit_count": count_digits(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
