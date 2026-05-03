@@ -205,3 +205,8 @@ def count_consonants(text: str) -> int:
 def count_digits(text: str) -> int:
     """Count ASCII decimal digits (0-9) in the text."""
     return sum(1 for ch in text if '0' <= ch <= '9')
+
+
+def count_whitespace(text: str) -> int:
+    """Count whitespace characters (str.isspace), including spaces, tabs, and newlines."""
+    return sum(1 for ch in text if ch.isspace())
