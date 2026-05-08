@@ -210,3 +210,8 @@ def count_digits(text: str) -> int:
 def count_whitespace(text: str) -> int:
     """Count whitespace characters (str.isspace), including spaces, tabs, and newlines."""
     return sum(1 for ch in text if ch.isspace())
+
+
+def count_letters(text: str) -> int:
+    """Count alphabetic characters (str.isalpha); covers Unicode letters, not just ASCII."""
+    return sum(1 for ch in text if ch.isalpha())

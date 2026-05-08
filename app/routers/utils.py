@@ -12,6 +12,7 @@ from ..formatting import (
     casefold_text,
     count_consonants,
     count_digits,
+    count_letters,
     count_vowels,
     count_whitespace,
     collapse_whitespace,
@@ -374,6 +375,11 @@ async def digit_count_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/whitespace-count", summary="Count whitespace characters in text")
 async def whitespace_count_endpoint(input: TextInput) -> dict[str, object]:
     return {"original": input.text, "whitespace_count": count_whitespace(input.text)}
+
+
+@router.post("/letter-count", summary="Count alphabetic characters in text")
+async def letter_count_endpoint(input: TextInput) -> dict[str, object]:
+    return {"original": input.text, "letter_count": count_letters(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
