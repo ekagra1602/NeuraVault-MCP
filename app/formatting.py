@@ -215,3 +215,8 @@ def count_whitespace(text: str) -> int:
 def count_letters(text: str) -> int:
     """Count alphabetic characters (str.isalpha); covers Unicode letters, not just ASCII."""
     return sum(1 for ch in text if ch.isalpha())
+
+
+def count_uppercase(text: str) -> int:
+    """Count uppercase characters (str.isupper); Unicode-aware."""
+    return sum(1 for ch in text if ch.isupper())
