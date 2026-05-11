@@ -13,6 +13,7 @@ from ..formatting import (
     count_consonants,
     count_digits,
     count_letters,
+    count_lowercase,
     count_uppercase,
     count_vowels,
     count_whitespace,
@@ -386,6 +387,11 @@ async def letter_count_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/uppercase-count", summary="Count uppercase characters in text")
 async def uppercase_count_endpoint(input: TextInput) -> dict[str, object]:
     return {"original": input.text, "uppercase_count": count_uppercase(input.text)}
+
+
+@router.post("/lowercase-count", summary="Count lowercase characters in text")
+async def lowercase_count_endpoint(input: TextInput) -> dict[str, object]:
+    return {"original": input.text, "lowercase_count": count_lowercase(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
