@@ -17,6 +17,7 @@ from ..formatting import (
     count_uppercase,
     count_vowels,
     count_whitespace,
+    count_words,
     collapse_whitespace,
     crc32_hex_utf8,
     escape_html,
@@ -392,6 +393,11 @@ async def uppercase_count_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/lowercase-count", summary="Count lowercase characters in text")
 async def lowercase_count_endpoint(input: TextInput) -> dict[str, object]:
     return {"original": input.text, "lowercase_count": count_lowercase(input.text)}
+
+
+@router.post("/word-count", summary="Count whitespace-delimited tokens in text")
+async def word_count_endpoint(input: TextInput) -> dict[str, object]:
+    return {"original": input.text, "word_count": count_words(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")

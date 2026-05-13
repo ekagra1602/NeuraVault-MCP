@@ -225,3 +225,8 @@ def count_uppercase(text: str) -> int:
 def count_lowercase(text: str) -> int:
     """Count lowercase characters (str.islower); Unicode-aware."""
     return sum(1 for ch in text if ch.islower())
+
+
+def count_words(text: str) -> int:
+    """Count whitespace-delimited tokens (str.split with no args collapses runs)."""
+    return len(text.split())
