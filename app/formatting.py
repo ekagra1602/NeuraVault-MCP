@@ -230,3 +230,8 @@ def count_lowercase(text: str) -> int:
 def count_words(text: str) -> int:
     """Count whitespace-delimited tokens (str.split with no args collapses runs)."""
     return len(text.split())
+
+
+def count_lines(text: str) -> int:
+    """Count lines using str.splitlines (no trailing empty line for terminal newline)."""
+    return len(text.splitlines())

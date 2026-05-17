@@ -13,6 +13,7 @@ from ..formatting import (
     count_consonants,
     count_digits,
     count_letters,
+    count_lines,
     count_lowercase,
     count_uppercase,
     count_vowels,
@@ -398,6 +399,11 @@ async def lowercase_count_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/word-count", summary="Count whitespace-delimited tokens in text")
 async def word_count_endpoint(input: TextInput) -> dict[str, object]:
     return {"original": input.text, "word_count": count_words(input.text)}
+
+
+@router.post("/line-count", summary="Count lines in text (str.splitlines)")
+async def line_count_endpoint(input: TextInput) -> dict[str, object]:
+    return {"original": input.text, "line_count": count_lines(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
