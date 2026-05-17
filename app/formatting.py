@@ -235,3 +235,8 @@ def count_words(text: str) -> int:
 def count_lines(text: str) -> int:
     """Count lines using str.splitlines (no trailing empty line for terminal newline)."""
     return len(text.splitlines())
+
+
+def swap_case(text: str) -> str:
+    """Swap uppercase and lowercase characters (str.swapcase); Unicode-aware."""
+    return text.swapcase()

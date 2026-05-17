@@ -38,6 +38,7 @@ from ..formatting import (
     sort_lines,
     strip_optional_prefix,
     strip_optional_suffix,
+    swap_case,
     truncate_plain,
     url_quote_utf8,
     url_unquote_utf8,
@@ -404,6 +405,11 @@ async def word_count_endpoint(input: TextInput) -> dict[str, object]:
 @router.post("/line-count", summary="Count lines in text (str.splitlines)")
 async def line_count_endpoint(input: TextInput) -> dict[str, object]:
     return {"original": input.text, "line_count": count_lines(input.text)}
+
+
+@router.post("/swap-case", summary="Swap uppercase and lowercase characters")
+async def swap_case_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "swapped": swap_case(input.text)}
 
 
 @router.post("/normalize-newlines", summary="Normalize line endings to LF")
