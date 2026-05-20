@@ -3,9 +3,12 @@
 import codecs as _codecs
 import html as _html
 import json as _json
+import re as _re
 import textwrap as _textwrap
 import zlib as _zlib
 from urllib.parse import quote as _percent_quote, unquote as _percent_unquote
+
+_SPACE_RUN = _re.compile(r' +')
 
 
 def seconds_as_compact_label(total_seconds: float) -> str:
@@ -188,6 +191,11 @@ def remove_blank_lines(text: str) -> str:
 def casefold_text(text: str) -> str:
     """Unicode case folding (str.casefold); stronger than lower() for comparisons."""
     return text.casefold()
+
+
+def squeeze_spaces_per_line(text: str) -> str:
+    """Collapse runs of spaces within each line; line breaks preserved."""
+    return '\n'.join(_SPACE_RUN.sub(' ', line) for line in text.splitlines())
 
 
 def count_vowels(text: str) -> int:

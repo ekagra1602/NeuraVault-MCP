@@ -36,6 +36,7 @@ from ..formatting import (
     reverse_word_order,
     rot13,
     sort_lines,
+    squeeze_spaces_per_line,
     strip_optional_prefix,
     strip_optional_suffix,
     swap_case,
@@ -608,6 +609,11 @@ async def remove_blank_lines_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/casefold", summary="Unicode case folding for case-insensitive matching")
 async def casefold_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "casefolded": casefold_text(input.text)}
+
+
+@router.post("/squeeze-spaces", summary="Collapse multiple spaces per line")
+async def squeeze_spaces_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "squeezed": squeeze_spaces_per_line(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
