@@ -198,6 +198,11 @@ def squeeze_spaces_per_line(text: str) -> str:
     return '\n'.join(_SPACE_RUN.sub(' ', line) for line in text.splitlines())
 
 
+def strip_each_line(text: str) -> str:
+    """Strip leading and trailing whitespace from each line; line breaks preserved."""
+    return '\n'.join(line.strip() for line in text.splitlines())
+
+
 def count_vowels(text: str) -> int:
     """Count ASCII vowels in the text, treating uppercase and lowercase equally."""
     vowels = {'a', 'e', 'i', 'o', 'u'}
