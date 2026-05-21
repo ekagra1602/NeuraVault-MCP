@@ -98,6 +98,14 @@ def pad_center(text: str, width: int, fill_char: str) -> str:
     return (fill_char * left) + text + (fill_char * right)
 
 
+def prefix_each_line(text: str, prefix: str) -> str:
+    """Prepend prefix to every line; splitlines/rejoin with LF (no trailing newline added)."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(prefix + line for line in lines)
+
+
 def strip_optional_prefix(text: str, prefix: str) -> str:
     """Remove leading prefix once if present; empty prefix leaves text unchanged."""
     if not prefix:

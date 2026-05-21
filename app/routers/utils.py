@@ -31,6 +31,7 @@ from ..formatting import (
     pad_center,
     pad_left,
     pad_right,
+    prefix_each_line,
     remove_blank_lines,
     reverse_lines,
     reverse_word_order,
@@ -620,6 +621,18 @@ async def squeeze_spaces_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/strip-lines", summary="Strip whitespace from each line")
 async def strip_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "stripped": strip_each_line(input.text)}
+
+
+@router.post("/prefix-lines", summary="Prepend a prefix to every line")
+async def prefix_lines_endpoint(
+    input: TextInput,
+    prefix: str = Query(..., description="String to prepend to each line"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "prefix": prefix,
+        "prefixed": prefix_each_line(input.text, prefix),
+    }
 
 
 @router.get("/ping", summary="Simple ping endpoint")
