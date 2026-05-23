@@ -42,6 +42,7 @@ from ..formatting import (
     strip_each_line,
     strip_optional_prefix,
     strip_optional_suffix,
+    suffix_each_line,
     swap_case,
     truncate_plain,
     url_quote_utf8,
@@ -633,6 +634,18 @@ async def prefix_lines_endpoint(
         "original": input.text,
         "prefix": prefix,
         "prefixed": prefix_each_line(input.text, prefix),
+    }
+
+
+@router.post("/suffix-lines", summary="Append a suffix to every line")
+async def suffix_lines_endpoint(
+    input: TextInput,
+    suffix: str = Query(..., description="String to append to each line"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "suffix": suffix,
+        "suffixed": suffix_each_line(input.text, suffix),
     }
 
 

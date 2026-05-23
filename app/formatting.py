@@ -132,6 +132,14 @@ def strip_optional_suffix(text: str, suffix: str) -> str:
     return text
 
 
+def suffix_each_line(text: str, suffix: str) -> str:
+    """Append suffix to every line; splitlines/rejoin with LF (no trailing newline added)."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(line + suffix for line in lines)
+
+
 def url_quote_utf8(text: str, safe: str = '') -> str:
     """Percent-encode for URLs using UTF-8; characters listed in safe are left as-is."""
     return _percent_quote(text, safe=safe, encoding='utf-8')
