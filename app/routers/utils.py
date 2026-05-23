@@ -28,6 +28,7 @@ from ..formatting import (
     json_string_literal,
     line_statistics,
     normalize_newlines,
+    number_lines,
     pad_center,
     pad_left,
     pad_right,
@@ -632,6 +633,20 @@ async def prefix_lines_endpoint(
         "original": input.text,
         "prefix": prefix,
         "prefixed": prefix_each_line(input.text, prefix),
+    }
+
+
+@router.post("/number-lines", summary="Prefix each line with a line number")
+async def number_lines_endpoint(
+    input: TextInput,
+    start: int = Query(1, ge=0, le=1_000_000, description="First line number"),
+    sep: str = Query(': ', description="Separator between number and line text"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "start": start,
+        "sep": sep,
+        "numbered": number_lines(input.text, start=start, sep=sep),
     }
 
 

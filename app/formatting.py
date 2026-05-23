@@ -57,6 +57,14 @@ def normalize_newlines(text: str) -> str:
     return text.replace('\r\n', '\n').replace('\r', '\n')
 
 
+def number_lines(text: str, start: int = 1, sep: str = ': ') -> str:
+    """Prefix each line with a line number and separator (default '1: ')."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(f'{i}{sep}{line}' for i, line in enumerate(lines, start=start))
+
+
 def utf8_byte_length(text: str) -> int:
     """Length of the string when encoded as UTF-8 (not the same as len(text) for non-ASCII)."""
     return len(text.encode('utf-8'))
