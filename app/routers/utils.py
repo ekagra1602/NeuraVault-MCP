@@ -46,6 +46,7 @@ from ..formatting import (
     suffix_each_line,
     swap_case,
     truncate_plain,
+    truncate_each_line,
     url_quote_utf8,
     url_unquote_utf8,
     unique_lines,
@@ -667,6 +668,18 @@ async def number_lines_endpoint(
 @router.post("/dedent", summary="Remove common leading whitespace from each line")
 async def dedent_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "dedented": dedent_block(input.text)}
+
+
+@router.post("/truncate-lines", summary="Truncate each line to a maximum length")
+async def truncate_lines_endpoint(
+    input: TextInput,
+    max_len: int = Query(80, ge=1, le=10_000, description="Maximum characters per line"),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "max_len": max_len,
+        "truncated": truncate_each_line(input.text, max_len),
+    }
 
 
 @router.get("/ping", summary="Simple ping endpoint")

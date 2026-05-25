@@ -38,6 +38,14 @@ def truncate_plain(text: str, max_len: int) -> str:
     return text[: max_len - 1] + '…'
 
 
+def truncate_each_line(text: str, max_len: int) -> str:
+    """Apply truncate_plain to every line; line breaks preserved."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(truncate_plain(line, max_len) for line in lines)
+
+
 def collapse_whitespace(text: str) -> str:
     """Replace any run of whitespace with single spaces and strip ends."""
     return ' '.join(text.split())
