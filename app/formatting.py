@@ -174,6 +174,11 @@ def crc32_hex_utf8(text: str) -> str:
     return f'{n:08x}'
 
 
+def dedent_block(text: str) -> str:
+    """Remove common leading whitespace from each line (textwrap.dedent)."""
+    return _textwrap.dedent(text)
+
+
 def reverse_lines(text: str) -> str:
     """Reverse order of lines (splitlines); join with LF only. Trailing newline not preserved."""
     return '\n'.join(reversed(text.splitlines()))

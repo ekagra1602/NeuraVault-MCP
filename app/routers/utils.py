@@ -21,6 +21,7 @@ from ..formatting import (
     count_words,
     collapse_whitespace,
     crc32_hex_utf8,
+    dedent_block,
     escape_html,
     expand_tabs,
     fill_wrapped,
@@ -661,6 +662,11 @@ async def number_lines_endpoint(
         "sep": sep,
         "numbered": number_lines(input.text, start=start, sep=sep),
     }
+
+
+@router.post("/dedent", summary="Remove common leading whitespace from each line")
+async def dedent_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "dedented": dedent_block(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
