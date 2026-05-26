@@ -26,6 +26,7 @@ from ..formatting import (
     expand_tabs,
     fill_wrapped,
     hex_encode_utf8,
+    indent_block,
     json_string_literal,
     line_statistics,
     normalize_newlines,
@@ -668,6 +669,18 @@ async def number_lines_endpoint(
 @router.post("/dedent", summary="Remove common leading whitespace from each line")
 async def dedent_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "dedented": dedent_block(input.text)}
+
+
+@router.post("/indent", summary="Indent every line with leading spaces")
+async def indent_endpoint(
+    input: TextInput,
+    width: int = Query(4, ge=1, le=32, description="Number of spaces to prepend to each line"),
+) -> dict[str, object]:
+    return {
+        "original": input.text,
+        "width": width,
+        "indented": indent_block(input.text, width=width),
+    }
 
 
 @router.post("/truncate-lines", summary="Truncate each line to a maximum length")

@@ -187,6 +187,16 @@ def dedent_block(text: str) -> str:
     return _textwrap.dedent(text)
 
 
+def indent_block(text: str, width: int = 4) -> str:
+    """Prefix every line with width spaces; width clamped to 1..32."""
+    w = max(1, min(width, 32))
+    prefix = ' ' * w
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(prefix + line for line in lines)
+
+
 def reverse_lines(text: str) -> str:
     """Reverse order of lines (splitlines); join with LF only. Trailing newline not preserved."""
     return '\n'.join(reversed(text.splitlines()))
