@@ -37,6 +37,7 @@ from ..formatting import (
     prefix_each_line,
     remove_blank_lines,
     reverse_lines,
+    reverse_chars_per_line,
     reverse_word_order,
     rot13,
     sort_lines,
@@ -560,6 +561,11 @@ async def crc32_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/reverse-lines", summary="Reverse order of lines in text")
 async def reverse_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "reversed_lines": reverse_lines(input.text)}
+
+
+@router.post("/reverse-line-chars", summary="Reverse characters within each line")
+async def reverse_line_chars_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "reversed": reverse_chars_per_line(input.text)}
 
 
 @router.post("/sort-lines", summary="Sort lines lexicographically")

@@ -202,6 +202,14 @@ def reverse_lines(text: str) -> str:
     return '\n'.join(reversed(text.splitlines()))
 
 
+def reverse_chars_per_line(text: str) -> str:
+    """Reverse characters within each line; line order unchanged."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(line[::-1] for line in lines)
+
+
 def sort_lines(text: str) -> str:
     """Sort lines lexicographically (splitlines); join with LF. Empty input yields empty string."""
     return '\n'.join(sorted(text.splitlines()))
