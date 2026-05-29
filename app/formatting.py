@@ -148,6 +148,14 @@ def suffix_each_line(text: str, suffix: str) -> str:
     return '\n'.join(line + suffix for line in lines)
 
 
+def title_each_line(text: str) -> str:
+    """Apply str.title() to each line; line breaks preserved."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(line.title() for line in lines)
+
+
 def url_quote_utf8(text: str, safe: str = '') -> str:
     """Percent-encode for URLs using UTF-8; characters listed in safe are left as-is."""
     return _percent_quote(text, safe=safe, encoding='utf-8')

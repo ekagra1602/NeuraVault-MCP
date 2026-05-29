@@ -47,6 +47,7 @@ from ..formatting import (
     strip_optional_suffix,
     suffix_each_line,
     swap_case,
+    title_each_line,
     truncate_plain,
     truncate_each_line,
     url_quote_utf8,
@@ -699,6 +700,11 @@ async def truncate_lines_endpoint(
         "max_len": max_len,
         "truncated": truncate_each_line(input.text, max_len),
     }
+
+
+@router.post("/title-lines", summary="Apply titlecase to each line independently")
+async def title_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "title_lines": title_each_line(input.text)}
 
 
 @router.get("/ping", summary="Simple ping endpoint")
