@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from uuid import uuid4
 
 from ..formatting import (
+    bullet_lines,
     casefold_text,
     count_consonants,
     count_digits,
@@ -705,6 +706,18 @@ async def truncate_lines_endpoint(
 @router.post("/title-lines", summary="Apply titlecase to each line independently")
 async def title_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "title_lines": title_each_line(input.text)}
+
+
+@router.post("/bullet-lines", summary="Prefix each line with a bullet marker")
+async def bullet_lines_endpoint(
+    input: TextInput,
+    bullet: str = Query('- ', description="Bullet string to prepend to each line"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "bullet": bullet,
+        "bulleted": bullet_lines(input.text, bullet=bullet),
+    }
 
 
 @router.get("/ping", summary="Simple ping endpoint")

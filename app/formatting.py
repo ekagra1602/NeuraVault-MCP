@@ -122,6 +122,11 @@ def prefix_each_line(text: str, prefix: str) -> str:
     return '\n'.join(prefix + line for line in lines)
 
 
+def bullet_lines(text: str, bullet: str = '- ') -> str:
+    """Prefix each line with a bullet marker (default '- ')."""
+    return prefix_each_line(text, bullet)
+
+
 def strip_optional_prefix(text: str, prefix: str) -> str:
     """Remove leading prefix once if present; empty prefix leaves text unchanged."""
     if not prefix:
