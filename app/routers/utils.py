@@ -10,6 +10,7 @@ from uuid import uuid4
 
 from ..formatting import (
     bullet_lines,
+    capitalize_each_line,
     casefold_text,
     count_consonants,
     count_digits,
@@ -706,6 +707,11 @@ async def truncate_lines_endpoint(
 @router.post("/title-lines", summary="Apply titlecase to each line independently")
 async def title_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "title_lines": title_each_line(input.text)}
+
+
+@router.post("/capitalize-lines", summary="Capitalize the first character of each line")
+async def capitalize_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "capitalized": capitalize_each_line(input.text)}
 
 
 @router.post("/bullet-lines", summary="Prefix each line with a bullet marker")
