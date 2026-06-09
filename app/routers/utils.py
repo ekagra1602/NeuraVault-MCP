@@ -56,6 +56,7 @@ from ..formatting import (
     url_quote_utf8,
     url_unquote_utf8,
     unique_lines,
+    upper_each_line,
     utf8_byte_length,
     zfill_to_width,
 )
@@ -718,6 +719,11 @@ async def capitalize_lines_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/lower-lines", summary="Lowercase each line independently")
 async def lower_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "lowered": lower_each_line(input.text)}
+
+
+@router.post("/upper-lines", summary="Uppercase each line independently")
+async def upper_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "uppercased": upper_each_line(input.text)}
 
 
 @router.post("/bullet-lines", summary="Prefix each line with a bullet marker")
