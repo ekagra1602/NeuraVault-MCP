@@ -49,6 +49,7 @@ from ..formatting import (
     strip_optional_prefix,
     strip_optional_suffix,
     suffix_each_line,
+    swap_case_each_line,
     swap_case,
     title_each_line,
     truncate_plain,
@@ -724,6 +725,11 @@ async def lower_lines_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/upper-lines", summary="Uppercase each line independently")
 async def upper_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "uppercased": upper_each_line(input.text)}
+
+
+@router.post("/swapcase-lines", summary="Swap case of each line independently")
+async def swapcase_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "swapped": swap_case_each_line(input.text)}
 
 
 @router.post("/bullet-lines", summary="Prefix each line with a bullet marker")

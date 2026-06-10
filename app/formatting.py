@@ -151,6 +151,14 @@ def upper_each_line(text: str) -> str:
     return '\n'.join(line.upper() for line in lines)
 
 
+def swap_case_each_line(text: str) -> str:
+    """Apply str.swapcase() to each line; line breaks preserved."""
+    lines = text.splitlines()
+    if not lines:
+        return text
+    return '\n'.join(line.swapcase() for line in lines)
+
+
 def strip_optional_prefix(text: str, prefix: str) -> str:
     """Remove leading prefix once if present; empty prefix leaves text unchanged."""
     if not prefix:
