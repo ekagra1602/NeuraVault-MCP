@@ -242,6 +242,11 @@ def indent_block(text: str, width: int = 4) -> str:
     return '\n'.join(prefix + line for line in lines)
 
 
+def join_lines_with(text: str, sep: str = ' ') -> str:
+    """Join lines from splitlines with sep (default single space)."""
+    return sep.join(text.splitlines())
+
+
 def reverse_lines(text: str) -> str:
     """Reverse order of lines (splitlines); join with LF only. Trailing newline not preserved."""
     return '\n'.join(reversed(text.splitlines()))

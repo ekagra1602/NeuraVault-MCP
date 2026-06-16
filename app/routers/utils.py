@@ -29,6 +29,7 @@ from ..formatting import (
     fill_wrapped,
     hex_encode_utf8,
     indent_block,
+    join_lines_with,
     json_string_literal,
     line_statistics,
     lower_each_line,
@@ -741,6 +742,18 @@ async def bullet_lines_endpoint(
         "original": input.text,
         "bullet": bullet,
         "bulleted": bullet_lines(input.text, bullet=bullet),
+    }
+
+
+@router.post("/join-lines", summary="Join lines with a separator")
+async def join_lines_endpoint(
+    input: TextInput,
+    sep: str = Query(' ', description="Separator placed between lines"),
+) -> dict[str, str]:
+    return {
+        "original": input.text,
+        "sep": sep,
+        "joined": join_lines_with(input.text, sep=sep),
     }
 
 
