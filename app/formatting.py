@@ -3,6 +3,7 @@
 import codecs as _codecs
 import html as _html
 import json as _json
+import random as _random
 import re as _re
 import textwrap as _textwrap
 import zlib as _zlib
@@ -263,6 +264,16 @@ def reverse_chars_per_line(text: str) -> str:
 def sort_lines(text: str) -> str:
     """Sort lines lexicographically (splitlines); join with LF. Empty input yields empty string."""
     return '\n'.join(sorted(text.splitlines()))
+
+
+def shuffle_lines(text: str) -> str:
+    """Randomly reorder lines (splitlines); join with LF. Single-line input unchanged."""
+    lines = text.splitlines()
+    if len(lines) <= 1:
+        return text
+    shuffled = lines.copy()
+    _random.shuffle(shuffled)
+    return '\n'.join(shuffled)
 
 
 def unique_lines(text: str) -> str:

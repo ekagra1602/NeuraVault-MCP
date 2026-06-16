@@ -45,6 +45,7 @@ from ..formatting import (
     reverse_word_order,
     rot13,
     sort_lines,
+    shuffle_lines,
     squeeze_spaces_per_line,
     strip_each_line,
     strip_optional_prefix,
@@ -578,6 +579,11 @@ async def reverse_line_chars_endpoint(input: TextInput) -> dict[str, str]:
 @router.post("/sort-lines", summary="Sort lines lexicographically")
 async def sort_lines_endpoint(input: TextInput) -> dict[str, str]:
     return {"original": input.text, "sorted_lines": sort_lines(input.text)}
+
+
+@router.post("/shuffle-lines", summary="Randomly reorder lines in text")
+async def shuffle_lines_endpoint(input: TextInput) -> dict[str, str]:
+    return {"original": input.text, "shuffled": shuffle_lines(input.text)}
 
 
 @router.post("/unique-lines", summary="Remove duplicate lines, keep first occurrence order")
