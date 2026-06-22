@@ -32,6 +32,7 @@ from ..formatting import (
     join_lines_with,
     json_string_literal,
     line_statistics,
+    lines_as_list,
     lower_each_line,
     normalize_newlines,
     number_lines,
@@ -761,6 +762,12 @@ async def join_lines_endpoint(
         "sep": sep,
         "joined": join_lines_with(input.text, sep=sep),
     }
+
+
+@router.post("/lines-as-list", summary="Split text into a list of lines")
+async def lines_as_list_endpoint(input: TextInput) -> dict[str, object]:
+    lines = lines_as_list(input.text)
+    return {"original": input.text, "line_count": len(lines), "lines": lines}
 
 
 @router.get("/ping", summary="Simple ping endpoint")

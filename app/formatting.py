@@ -1,4 +1,4 @@
-# Shared text/formatting helpers (no HTTP layer).
+a# Shared text/formatting helpers (no HTTP layer).
 
 import codecs as _codecs
 import html as _html
@@ -246,6 +246,11 @@ def indent_block(text: str, width: int = 4) -> str:
 def join_lines_with(text: str, sep: str = ' ') -> str:
     """Join lines from splitlines with sep (default single space)."""
     return sep.join(text.splitlines())
+
+
+def lines_as_list(text: str) -> list[str]:
+    """Split text into lines using str.splitlines."""
+    return text.splitlines()
 
 
 def reverse_lines(text: str) -> str:
